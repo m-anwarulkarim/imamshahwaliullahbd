@@ -1,0 +1,14 @@
+# Admin panel repair
+- [x] Verify public orders, programme applications and short-course payment requests reach admin with complete details.
+- [x] Remove record limits and keep admin submission lists refreshed; add regression tests.
+- [x] Secure server functions and verify policies/grants.
+- [x] Reliable dashboard, inboxes and actionable workflow controls.
+- [x] Content upload/validation, event translations and order safety.
+- [x] Course editing, fees, lessons and payment access.
+- [x] Working header, mobile navigation and trilingual admin UI.
+- [x] Automated permission/rule tests and authenticated end-to-end checks.
+- [x] Status filters on enrollments, memberships and donations inboxes.
+- [x] CSV export on orders, enrollments, memberships, donations and messages.
+- [x] Admin user management page (list, add by email, remove) with profiles table and admin role policies.
+- [ ] Email notifications for new orders/applications — blocked: no email domain configured; user must complete email domain setup first.
+- [ ] Cloudflare production verification — blocked until the owner deploys the updated build.

@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790819487506,
+      "tag": "0000_short_courses_access",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790820765104,
+      "tag": "0001_add_monthly_fee_to_short_courses",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791968647474,
+      "tag": "0002_anon_read_magazine_files",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792545066982,
+      "tag": "0003_admin_workflows_order_snapshots",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792545322732,
+      "tag": "0004_admin_storage_and_course_validation",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793415243079,
+      "tag": "0005_admin_user_management",
+      "breakpoints": true
+    }
+  ]
+}

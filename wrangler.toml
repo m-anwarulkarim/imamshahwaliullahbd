@@ -1,0 +1,32 @@
+name = "iswdri"
+main = "dist/server/index.mjs"
+compatibility_date = "2026-08-09"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "dist/client"
+binding = "ASSETS"
+
+# ============================================================
+# Cloudflare D1 Database
+# Dashboard → D1 → Create database → database_id নিচে বসাও
+# ============================================================
+[[d1_databases]]
+binding = "DB"
+database_name = "imamshahwaliullahbd"
+database_id = "caa0c376-3e10-47c2-8c9c-59d55799f439"
+
+# ============================================================
+# Cloudflare R2 Storage — image ও PDF রাখার জন্য
+# Dashboard → R2 → Create bucket → bucket name নিচে বসাও
+# দুটো bucket তৈরি করো:
+#   1. iswdri-images  (content images)
+#   2. iswdri-pdfs    (magazine PDFs)
+# ============================================================
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "iswdri-images"
+
+[[r2_buckets]]
+binding = "PDFS"
+bucket_name = "iswdri-pdfs"
