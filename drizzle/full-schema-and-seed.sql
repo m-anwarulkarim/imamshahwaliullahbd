@@ -1,0 +1,293 @@
+-- ============================================================
+-- 1. BETTER-AUTH TABLES
+-- ============================================================
+CREATE TABLE IF NOT EXISTS "user" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL UNIQUE,
+    "emailVerified" INTEGER NOT NULL DEFAULT 0,
+    "image" TEXT,
+    "createdAt" INTEGER NOT NULL,
+    "updatedAt" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "session" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "expiresAt" INTEGER NOT NULL,
+    "token" TEXT NOT NULL UNIQUE,
+    "createdAt" INTEGER NOT NULL,
+    "updatedAt" INTEGER NOT NULL,
+    "ipAddress" TEXT,
+    "userAgent" TEXT,
+    "userId" TEXT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "account" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "accountId" TEXT NOT NULL,
+    "providerId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
+    "accessToken" TEXT,
+    "refreshToken" TEXT,
+    "idToken" TEXT,
+    "accessTokenExpiresAt" INTEGER,
+    "refreshTokenExpiresAt" INTEGER,
+    "scope" TEXT,
+    "password" TEXT,
+    "createdAt" INTEGER NOT NULL,
+    "updatedAt" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "verification" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "identifier" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+    "expiresAt" INTEGER NOT NULL,
+    "createdAt" INTEGER,
+    "updatedAt" INTEGER
+);
+
+-- ============================================================
+-- 2. APPLICATION TABLES
+-- ============================================================
+CREATE TABLE IF NOT EXISTS "books" (
+  "id" TEXT PRIMARY KEY,
+  "title" TEXT NOT NULL,
+  "author" TEXT NOT NULL,
+  "price" REAL NOT NULL,
+  "description" TEXT,
+  "category" TEXT,
+  "cover_url" TEXT,
+  "stock" INTEGER,
+  "is_featured" INTEGER DEFAULT 0,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "orders" (
+  "id" TEXT PRIMARY KEY,
+  "book_id" TEXT REFERENCES "books"("id"),
+  "customer_name" TEXT NOT NULL,
+  "customer_email" TEXT NOT NULL,
+  "customer_phone" TEXT NOT NULL,
+  "address" TEXT NOT NULL,
+  "quantity" INTEGER NOT NULL DEFAULT 1,
+  "status" TEXT NOT NULL DEFAULT 'pending',
+  "book_title" TEXT,
+  "unit_price" REAL,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "short_courses" (
+  "id" TEXT PRIMARY KEY,
+  "slug" TEXT NOT NULL UNIQUE,
+  "title_en" TEXT NOT NULL,
+  "title_bn" TEXT NOT NULL,
+  "title_ar" TEXT NOT NULL,
+  "subtitle_en" TEXT,
+  "subtitle_bn" TEXT,
+  "subtitle_ar" TEXT,
+  "image_url" TEXT,
+  "fee" REAL,
+  "monthly_fee" REAL,
+  "is_published" INTEGER NOT NULL DEFAULT 0,
+  "sort_order" INTEGER NOT NULL DEFAULT 0,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "course_access" (
+  "id" TEXT PRIMARY KEY,
+  "course_id" TEXT REFERENCES "short_courses"("id"),
+  "user_id" TEXT NOT NULL,
+  "full_name" TEXT NOT NULL,
+  "phone" TEXT NOT NULL,
+  "payment_method" TEXT NOT NULL,
+  "transaction_id" TEXT NOT NULL,
+  "amount" REAL,
+  "status" TEXT NOT NULL DEFAULT 'pending',
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "course_enrollments" (
+  "id" TEXT PRIMARY KEY,
+  "full_name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+  "phone" TEXT NOT NULL,
+  "course" TEXT NOT NULL,
+  "education" TEXT,
+  "message" TEXT,
+  "status" TEXT NOT NULL DEFAULT 'pending',
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "course_lessons" (
+  "id" TEXT PRIMARY KEY,
+  "course_id" TEXT NOT NULL REFERENCES "short_courses"("id"),
+  "title" TEXT NOT NULL,
+  "kind" TEXT NOT NULL DEFAULT 'video',
+  "url" TEXT NOT NULL,
+  "scheduled_at" INTEGER,
+  "sort_order" INTEGER NOT NULL DEFAULT 0,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "events" (
+  "id" TEXT PRIMARY KEY,
+  "title" TEXT NOT NULL,
+  "title_en" TEXT,
+  "title_ar" TEXT,
+  "description" TEXT,
+  "description_en" TEXT,
+  "description_ar" TEXT,
+  "location" TEXT,
+  "location_en" TEXT,
+  "location_ar" TEXT,
+  "event_date" TEXT NOT NULL,
+  "event_time" TEXT,
+  "category" TEXT,
+  "image_url" TEXT,
+  "is_published" INTEGER NOT NULL DEFAULT 0,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "magazines" (
+  "id" TEXT PRIMARY KEY,
+  "title" TEXT NOT NULL,
+  "issue_month" TEXT NOT NULL,
+  "description" TEXT,
+  "cover_url" TEXT,
+  "pdf_url" TEXT NOT NULL,
+  "page_count" INTEGER,
+  "is_published" INTEGER NOT NULL DEFAULT 0,
+  "published_at" INTEGER NOT NULL,
+  "created_at" INTEGER NOT NULL,
+  "updated_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "news_posts" (
+  "id" TEXT PRIMARY KEY,
+  "title" TEXT NOT NULL,
+  "excerpt" TEXT,
+  "content" TEXT,
+  "category" TEXT,
+  "image_url" TEXT,
+  "is_published" INTEGER NOT NULL DEFAULT 0,
+  "published_at" INTEGER,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "profiles" (
+  "id" TEXT PRIMARY KEY,
+  "email" TEXT NOT NULL,
+  "full_name" TEXT,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "user_roles" (
+  "id" TEXT PRIMARY KEY,
+  "user_id" TEXT NOT NULL,
+  "role" TEXT NOT NULL,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "contact_messages" (
+  "id" TEXT PRIMARY KEY,
+  "name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+  "phone" TEXT,
+  "subject" TEXT NOT NULL,
+  "message" TEXT NOT NULL,
+  "is_read" INTEGER NOT NULL DEFAULT 0,
+  "is_archived" INTEGER NOT NULL DEFAULT 0,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "donations" (
+  "id" TEXT PRIMARY KEY,
+  "full_name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+  "phone" TEXT NOT NULL,
+  "amount" REAL NOT NULL,
+  "donation_type" TEXT NOT NULL,
+  "message" TEXT,
+  "status" TEXT NOT NULL DEFAULT 'pending',
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "membership_applications" (
+  "id" TEXT PRIMARY KEY,
+  "full_name" TEXT NOT NULL,
+  "email" TEXT NOT NULL,
+  "phone" TEXT,
+  "membership_type" TEXT NOT NULL,
+  "institution" TEXT,
+  "statement" TEXT NOT NULL,
+  "status" TEXT NOT NULL DEFAULT 'pending',
+  "admin_notes" TEXT,
+  "created_at" INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
+  "id" TEXT PRIMARY KEY,
+  "email" TEXT NOT NULL UNIQUE,
+  "created_at" INTEGER NOT NULL
+);
+
+-- ============================================================
+-- 3. SEED DATA (FROM SUPABASE BACKUP)
+-- ============================================================
+
+-- books (11 rows)
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('0aec74f9-48f4-4a6f-b605-677334124484','বিশ্বায়ন: সাম্রাজ্যবাদের নতুন স্ট্র্যাটেজি','মূল: ড. ইয়াসির নাদিম (অনুবাদ: ড. শহীদুল ইসলাম ফারুকী)',480.00,'Exploring globalization as a modern manifestation of imperialism and its impact on the Muslim world.','Political Science','/books/bishshayon.webp',35,1,1786554513);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('f6be2a76-67be-4be3-96b4-0649293cfb1e','অমুসলিমদের প্রতি দাওয়াত','মাওলানা আতিক আহমাদ কাসিmi (অনুবাদ: ড. মাওলানা শহীদুল ইসলাম ফারুকী)',320.00,'A comprehensive guide on the methodologies and ethics of inviting non-Muslims to the message of Islam.','Dawah','/books/omuslimder-proti-dawah.webp',60,1,1786554513);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('cee54552-6970-4945-a4e8-6620333a545b','আধুনিক ধর্মহীনতা ও তার প্রতিরোধ','ডক্টর মাওলানা শহীদুল ইসলাম ফারুকী',450.00,'A scholarly analysis of modern secularism and strategies for intellectual resistance from an Islamic perspective.','Theology','/books/adhunik-dhormohinata.webp',50,1,1786554513);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('fed969f9-a96b-4b29-8963-f2848445cfe9','তাজদিদে দীন','ড. ইয়াসির নাদিম (অনুবাদ: ড. শহীদুল ইসলাম ফারুকী)',400.00,'A critical examination of the concept of religious renewal (Tajdid) in Islamic history and modern times.','History','/books/tajdid-e-deen.webp',45,1,1786554513);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('b6c94c85-4cc9-4f03-ba96-904694a2581d','ইমামুল হিন্দ শাহ ওয়ালিউল্লাহ দেহলভী স্মারকগ্রন্থ','সংকলন ও অনুবাদ: ড. মাওলানা শহীদুল ইসলাম ফারুকী',500.00,'মাওলানা মুহাম্মদ মনসুর নোমানী রহ. সম্পাদিত উর্দু ম্যাগাজিন মাসিক আল-ফুরকান-এর "শাহ ওয়ালিউল্লাহ রহ. বিশেষ সংখ্যা"-এর বাংলা অনুবাদ। সংকলন ও অনুবাদ: ড. মাওলানা শহীদুল ইসলাম ফারুকী। ব্যবস্থাপনায়: শায়খ মাওলানা মুহাম্মাদ সালমান।','Shah Waliullah Studies','/books/shah-waliullah-smarak-grantha.webp',100,1,1786554604);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('f87008c8-53ba-41c3-b952-5dc57a430217','المباحث السنية في مقاصد الشريعة','Dr. Shahidul Islam Faruqi',650.00,'An in-depth Arabic scholarly work exploring the objectives of Shariah (Maqasid al-Shari''a) with traditional insight.','Maqasid','/books/maqasid-arabic-cover.webp',0,1,1787530743);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('3032abb4-db3c-426a-98ec-8910bdad3ad5','সীরাত কনফারেন্স স্মারক','Research Institute Editorial Board',350.00,'Special commemorative publication from the Seerat Conference 2026, containing scholarly papers and reports.','History','/books/bishshayon-mockup.webp',0,1,1787530743);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('e63d6b77-ce1e-4080-b7f6-88ded995a34e','প্রাচ্যবাদ','ডক্টর শহীদুল ইসলাম ফারুকী',400.00,'ইসলামের বিরুদ্ধে পশ্চিমের বুদ্ধিবৃত্তিক ও জ্ঞানতাত্ত্বিক আগ্রাসন নিয়ে গভীর বিশ্লেষণমূলক গ্রন্থ।','Research','/books/prachyobad.webp',50,1,1788450818);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('e9fd1651-f16f-4ed7-8040-1ca0b28c3510','মাসিক আল ফুরকান','ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রহ. রিসার্চ ইনস্টিটিউট',60.00,'দীনি, ইসলাহি ও ফিকরি সাময়িকী — সেপ্টেম্বর ২০২৬ ঈসায়ী / রবিউল আউয়াল ১৪৪৮ হিজরি সংখ্যা।','Journal','/books/masik-al-furqan.webp',200,1,1788450818);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('74bdf5a0-65d5-462b-9ac6-eae585c6e1a2','আধুনিক প্রেক্ষাপটে শাহ ওয়ালিউল্লাহ দেহলভী রহ.-এর চিন্তাধারার সুত্রপাত','মাওলানা বশীর আহমদ আমিনী (অনুবাদ: ড. মাওলানা শহীদুল ইসলাম ফারুকী)',700.00,'আধুনিক প্রেক্ষাপটে ইমাম শাহ ওয়ালিউল্লাহ দেহলভী (রহ.)-এর চিন্তাধারার সূত্রপাত নিয়ে গভীর গবেষণামূলক গ্রন্থ। প্রকার: মাওলানা বশীর আহমদ আমিনী। অনুবাদক: ড. মাওলানা শহীদুল ইসলাম ফারুকী। ব্যবস্থাপক: শায়খ মাওলানা মুহাম্মাদ সালমান। মুদ্রিত মূল্য: ১০০০ টাকা; বিক্রয় মূল্য: ৭০০ টাকা।','Research','/books/chintadharar-shurutro.webp',25,1,1789006143);
+INSERT OR IGNORE INTO books (id,title,author,price,description,category,cover_url,stock,is_featured,created_at) VALUES ('b7a869df-ab1f-40d5-8703-1977152c07ff','মাকাসিদুশ শরীয়াহ','ডক্টর মাওলানা শহীদুল ইসলাম ফারুকী',550.00,'শরীয়াহর উদ্দেশ্য ও মাকাসিদ বিষয়ে গভীর গবেষণামূলক গ্রন্থ। লেখক: ডক্টর মাওলানা শহীদুল ইসলাম ফারুকী।','Research','/books/maqasidush-shariah.webp',20,1,1789006507);
+
+-- short_courses (7 rows)
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('d42f5bea-820f-4b65-aaa1-b0820f04ada4','usul-ad-dawah','Usul ad-Dawah Course','উসূলুদ দাওয়াহ কোর্স','دورة أصول الدعوة','Islamic Dawah: Introduction, Principles, and Strategies','ইসলামী দাওয়াহ : পরিচিতি, মূলনীতি ও কৌশল','الدعوة الإسلامية: التعريف والمبادئ والاستراتيجيات',NULL,1000,500,1,1,1790819514);
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('5e121838-d436-4d2a-9d17-db5be429cea4','farz-e-ain','Farz-E-Ain Course','ফরজে আইন কোর্স','دورة فرض العين','Essential Islamic Knowledge','মৌলিক দ্বীন শিক্ষা','العلوم الشرعية الأساسية',NULL,1000,500,1,2,1790819514);
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('b640383c-2743-4ea6-9fa0-f92691c7bd5b','maqasid-ash-shariah','Maqasid ash-Shariah Course','মাকাসিদুশ শরীআহ কোর্স','دورة مقاصد الشريعة','Objectives and Philosophy of Islamic Law','ইসলামী শরীআহর উদ্দেশ্য ও দর্শন','مقاصد الشريعة الإسلامية وفلسفتها',NULL,1000,500,1,3,1790819514);
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('d0b73f5a-0743-4b2e-9631-32f87c01a669','tahafutul-malahidah','Tahafutul Malahidah Course','তাহাফুতুল মালাহিদা কোর্স','دورة تهافت الملاحدة','Tackling Modern Intellectualism and Atheism','আধুনিক বুদ্ধিবৃত্তিক ও নাস্তিক্যবাদ মোকাবেলা','مواجهة الفكر الحديث والإلحاد',NULL,1000,500,1,4,1790819514);
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('02ca571f-4c87-4fd0-bc59-8d01bc1bac13','islamic-research-methodology','Islamic Research Methodology Course','ইসলামী গবেষণা পদ্ধতি কোর্স','دورة منهجية البحث الإسلامي','Principles and Methods of Islamic Research','ইসলামী গবেষণার নিয়ম ও পদ্ধতি','قواعد البحث الإسلامي ومناهجه',NULL,1000,500,1,5,1790819514);
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('ec45af63-eca0-4fa3-81a9-f0585ea8667d','arabic-tahadduth','Arabic Tahadduth Course','আরবী তাহাদ্দুস কোর্স','دورة التحدث بالعربية','Arabic Conversation & Spoken Arabic','আরবি কথোপকথন','المحادثة العربية',NULL,1000,500,1,6,1790819514);
+INSERT OR IGNORE INTO short_courses (id,slug,title_en,title_bn,title_ar,subtitle_en,subtitle_bn,subtitle_ar,image_url,fee,monthly_fee,is_published,sort_order,created_at) VALUES ('740f6c2b-eb4b-4c6d-8664-044c67d88f92','spoken-english','Spoken English Course','ইংরেজি স্পোকেন কোর্স','دورة اللغة الإنجليزية المحكية','Spoken English for Daily Conversation','স্পোকেন ইংলিশ ফর ডেইলি কনভারসেশন','الإنجليزية المحكية للمحادثة اليومية',NULL,1000,500,1,7,1790819514);
+
+-- events (22 rows)
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('032649ab-f4b0-40fa-8ec3-b4c02b440b3e','সম্মানিত উলামাদের প্যানেল','Panel of Honourable Ulama','هيئة العلماء المحتجين','সম্মেলনে সম্মানিত আলেমদের প্রধান টেবিল।','The head table of honourable scholars at the conference.','طاولة كبار العلماء في المؤتمر.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-38.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('d31b9e4d-b8eb-40aa-8bb6-feda2a11acf8','আলেমদের বক্তৃতা — উলামা সম্মেলন','Scholarly Address — Ulama Conference','خطاب علمي — مؤتمر العلماء','সম্মানিত উলামায়ে কেরাম ইসলামি জ্ঞানচর্চার পুনরুজ্জীবন বিষয়ে সমবেশকে সম্বোধন করছেন।','Honourable Ulama addressing the assembly on the revival of Islamic scholarship.','يخاطب العلماء المحتجون الجمع حول إحياء الدراسات الإسلامية.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-33.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('09755a29-be71-400f-be01-e76745c3b4a8','আন্তর্জাতিক উলামা সম্মেলন ২০২৬','International Ulama Conference 2026','مؤتمر العلماء الدولي 2026','ইনস্টিটিউট আয়োজিত আন্তর্জাতিক উলামা সম্মেলনে বিশিষ্ট আলেমদের মূল বক্তৃতা।','Distinguished scholars delivering keynote addresses at the international Ulama conference hosted by the institute.','يلقي علماء بارزون كلمات رئيسية في مؤتمر العلماء الدولي الذي ينظمه المعهد.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-31.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('05e67719-1772-499a-b3b9-ddd97f67eda8','মূল বক্তৃতা — উলামা সম্মেলন','Keynote Address — Ulama Conference','الكلمة الرئيسية — مؤتمر العلماء','একজন প্রবীণ আলেম সমকালীন ইসলামি চিন্তা বিষয়ে গবেষণাপত্র উপস্থাপন করছেন।','A senior scholar presents a research paper on contemporary Islamic thought.','يقدم عالم كبير ورقة بحثية حول الفكر الإسلامي المعاصر.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-32.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('a2626962-3118-4a60-bdba-a81bde7a81ac','অতিথি আলেমের বক্তৃতা','Guest Scholar Address','كلمة عالم ضيف','একজন আমন্ত্রিত আলেম সম্মেলনের অধিবেশনকে সম্বোধন করছেন।','An invited scholar addressing the conference session.','يخاطب عالم مدعو جلسة المؤتمر.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-37.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('a7b904aa-d213-431c-a7e3-1f53e2d09236','আলেমদের আলোচনা','Scholarly Deliberation','مداولة علمية','একজন প্রবীণ আলেম ওয়ালিউল্লাহি চিন্তার বিষয়ে আলোচনা করছেন।','A senior scholar deliberating on themes of Waliullahi thought.','يتداول عالم كبير في موضوعات الفكر الولي اللهي.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-36.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('5062419f-d5c0-4265-9e5a-481cc4590045','সভাপতির বক্তৃতা','Presidential Speech','كلمة رئيس الجلسة','সম্মেলনের সভাপতি শ্রোতাদের উদ্দেশ্যে বক্তৃতা প্রদান করছেন।','The president of the conference delivering his address to the audience.','يلقي رئيس المؤتمر كلمته على الجمهور.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-35.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('aec7cb63-26c0-4488-8f73-a07b54687e28','গবেষণাপত্র উপস্থাপন','Research Paper Presentation','تقديم ورقة بحثية','উপস্থিত আলেম ও গবেষকদের সামনে একটি একাডেমিক গবেষণাপত্র উপস্থাপন।','Presentation of an academic paper before the gathered scholars and researchers.','تقديم ورقة أكاديمية أمام العلماء والباحثين المجتمعين.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-34.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('774cc06b-04cf-475c-b0cd-9ac0cf9aa14e','বই প্রকাশনা অনুষ্ঠান','Book Launch Ceremony','حفل إطلاق الكتاب','সম্মেলনে ইনস্টিটিউটের নতুন প্রকাশনার উন্মোচন।','Unveiling of the institute''s latest publication at the conference.','تدشين أحدث إصدارات المعهد في المؤتمر.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-40.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('569331ab-5b6b-4487-89c5-d901b0381aaa','সম্মেলনের শ্রোতা','Conference Audience','جمهور المؤتمر','শত শত আলেম, ছাত্র ও গবেষক সম্মেলনের অধিবেশনে উপস্থিত।','Hundreds of scholars, students and researchers attending the conference sessions.','مئات العلماء والطلاب والباحثين يحضرون جلسات المؤتمر.','2026-07-18',NULL,'ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Conference','/programs/conference-39.webp',1,1788656217);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('466e090f-4dfc-4812-9671-908af69e26b6','পাণ্ডুলিপি সংরক্ষণ','Manuscript Preservation','حفظ المخطوطات','বিরল ইসলামিক পাণ্ডুলিপি ডিজিটাইজ ও সংরক্ষণ কার্যক্রম।','Digitisation and preservation of rare Islamic manuscripts.','رقمنة وحفظ المخطوطات الإسلامية النادرة.','2026-09-03',NULL,'Manuscript Archive','Manuscript Archive','أرشيف المخطوطات','payam-e-insaniyat','/payam/manuscript-preservation.webp',1,1788454673);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('5a39246e-30cf-4ee3-890d-01163153a9f3','গবেষণা সহযোগিতা','Research Collaboration','التعاون البحثي','দেশি-বিদেশি গবেষকদের সাথে যৌথ গবেষণা ও পাণ্ডুলিপি অধ্যয়ন।','Joint research and manuscript study with local and international researchers.','تعاون بحثي ودراسة المخطوطات مع باحثين محليين ودوليين.','2026-09-03',NULL,'Research Division','Research Division','قسم البحوث','payam-e-insaniyat','/payam/research-collaboration.webp',1,1788454673);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('ff6aaf2c-ddd0-4728-a974-9f3e239401ef','লাইব্রেরি সেবা','Library Services','خدمات المكتبة','গবেষক ও সাধারণ পাঠকদের জন্য উন্মুক্ত গ্রন্থাগার সেবা।','Open library service for researchers and general readers.','خدمات مكتبة مفتوحة للباحثين والقراء العامين.','2026-09-03',NULL,'Central Library','Central Library','المكتبة المركزية','payam-e-insaniyat','/payam/library-service.webp',1,1788454673);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('2e0f9917-fba8-45e5-9f3c-988786fbb393','সেমিনার ও প্রশিক্ষণ','Seminars & Training','الندوات والتدريب','তরুণ গবেষকদের জন্য নিয়মিত সেমিনার, কর্মশালা ও প্রশিক্ষণ কর্মসূচি।','Regular seminars, workshops and training programmes for young researchers.','ندوات وورش تدريب وبرامج تدريب منتظمة للباحثين الشباب.','2026-09-03',NULL,'Seminar Hall','Seminar Hall','قاعة الندوات','payam-e-insaniyat','/payam/seminar-training.webp',1,1788454673);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('b4657ed4-6e92-4308-9180-3c886f2e9117','গবেষণা কার্যালয়','Institute Research Office','مكتب الأبحاث بالمعهد','ইনস্টিটিউট কার্যালয়ে নিত্য গবেষণা ও সম্পাদকীয় কাজ।','Daily scholarly research and editorial work at the institute office.','البحث العلمي اليومي والعمل التحريري في مكتب المعهد.','2026-09-05',NULL,'ইনস্টিটিউট প্রধান কার্যালয়','Institute Head Office','المكتب الرئيسي للمعهد','Institutional','/programs/institute-office.webp',1,1788313945);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('80c657ee-3f06-450c-beae-bc8971ee54d6','ইসলামি সাহিত্য সেমিনার','Islamic Literature Seminar','ندوة الأدب الإسلامي','আলেম ও ছাত্রদের অংশগ্রহণে ইসলামি সাহিত্য বিষয়ক একটি সেমিনার।','A seminar on Islamic literature attended by scholars and students.','ندوة حول الأدب الإسلامي يحضرها العلماء والطلاب.','2026-09-09',NULL,'ইনস্টিটিউট সেমিনার হল','Institute Seminar Hall','قاعة الندوات بالمعهد','Seminar','/programs/islamic-literature-seminar.webp',1,1788313945);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('6d385ace-aa4b-4bd8-9d2f-a41bbbfe08dc','গবেষণা গ্রন্থাগার ব্যবহার','Research Library Access','الوصول إلى مكتبة البحوث','ইনস্টিটিউট গবেষণা গ্রন্থাগার ও ডিজিটাল পাঠদেশের উন্মুক্ত সুযোগ।','Open access to the institute research library and digital study desks.','وصول مفتوح إلى مكتبة بحوث المعهد وموائد الدراسة الرقمية.','2026-09-13',NULL,'ইনস্টিটিউট গ্রন্থাগার','Institute Library','مكتبة المعهد','Library','/programs/research-library.webp',1,1788313945);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('924fd7d8-4f7d-4e5f-91e8-8e5738f9f1c1','পাণ্ডুলিপি ও আর্কাইভ বিভাগ','Manuscript & Archive Section','قسم المخطوطات والأرشيف','বিরল পাণ্ডুলিপি ও সংকলনের সংরক্ষণ ও সূচীকরণ।','Preservation and cataloguing of rare manuscripts and periodicals.','حفظ وفهرسة المخطوطات والمطبوعات النادرة.','2026-09-17',NULL,'আর্কাইভ কক্ষ','Archive Room','غرفة الأرشيف','Archive','/programs/manuscript-archive.webp',1,1788313945);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('1b5f383f-a149-4861-b342-e635483215d8','রেফারেন্স সংগ্রহ','Reference Collection','مجموعة المراجع','ইসলামি বিজ্ঞান ও চিন্তাধারা বিষয়ক নির্বাচিত রেফারেন্স সংগ্রহ।','Curated reference collection covering Islamic sciences and thought.','مجموعة مراجع مختارة تغطي العلوم الإسلامية والفكر.','2026-09-21',NULL,'ইনস্টিটিউট গ্রন্থাগার','Institute Library','مكتبة المعهد','Library','/programs/reference-collection.webp',1,1788313945);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('1f034e65-2328-4841-ae30-2740393270a9','সাইয়েদ আবুল হাসান আলী নদভী রহ. স্মারক সেমিনার','Syed Abul Hasan Ali Nadwi (r.h.) Memorial Seminar','الندوة التذكارية للشيخ سيد أبي الحسن علي الندوي رحمه الله','তরুণ ওলামায়ে কেরামের অংশগ্রহণে অনুষ্ঠিত সেমিনার, যেখানে মুফাক্কিরে ইসলাম সাইয়েদ আবুল হাসান আলী নদভী রহ.-এর চিন্তা ও দাওয়াতি কর্মধারা নিয়ে আলোচনা হয়।','A memorial seminar honoring the scholarly legacy of Mufakkir-e-Islam Syed Abul Hasan Ali Nadwi (r.h.), gathering ulama and intellectuals to reflect on his contributions to Islamic thought and da’wah.','ندوة تذكارية تكرّم الموروث العلمي للشيخ سيد أبي الحسن علي الندوي رحمه الله، تجمع العلماء والمفكرين للتأمل في إسهاماته في الفكر الإسلامي والدعوة.','2026-09-22','17:55','ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Seminar','/programs/nadwi-seminar-1.webp',1,1790299442);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('1d92a98c-3a7f-400c-90b9-2aa15e4ca97f','নদভী রহ. স্মারক সেমিনার — আলোচনা পর্ব','Nadwi (r.h.) Memorial Seminar — Discussion Session','الندوة التذكارية للشيخ الندوي رحمه الله — جلسة النقاش','সেমিনারের আলোচনা পর্বে উপস্থিত ওলামায়ে কেরাম ও অংশগ্রহণকারীদের মতবিনিময়।','A memorial seminar honoring the scholarly legacy of Mufakkir-e-Islam Syed Abul Hasan Ali Nadwi (r.h.), gathering ulama and intellectuals to reflect on his contributions to Islamic thought and da’wah.','ندوة تذكارية تكرّم الموروث العلمي للشيخ سيد أبي الحسن علي الندوي رحمه الله، تجمع العلماء والمفكرين للتأمل في إسهاماته في الفكر الإسلامي والدعوة.','2026-09-22','17:55','ঢাকা, বাংলাদেশ','Dhaka, Bangladesh','دكا، بنغلاديش','Seminar','/programs/nadwi-seminar-2.webp',1,1790299441);
+INSERT OR IGNORE INTO events (id,title,title_en,title_ar,description,description_en,description_ar,event_date,event_time,location,location_en,location_ar,category,image_url,is_published,created_at) VALUES ('e6f9d2db-9d8b-45f1-b7de-b445d5c2dcb7','কুরআন ও তাফসির সংগ্রহ','Qur''an & Tafsir Collection','مجموعة القرآن والتفسير','কুরআন অনুবাদ, তাফসির ও সীরাত গ্রন্থের জন্য নিবেদিত তাক।','Dedicated shelves for Qur''anic translation, tafsir and biography works.','رفوف مخصصة لترجمات القرآن والتفسير وكتب السيرة.','2026-09-25',NULL,'ইনস্টিটিউট গ্রন্থাগার','Institute Library','مكتبة المعهد','Library','/programs/quran-tafsir-shelf.webp',1,1788313945);
+
+-- magazines (2 rows)
+INSERT OR IGNORE INTO magazines (id,title,issue_month,description,cover_url,pdf_url,page_count,is_published,published_at,created_at,updated_at) VALUES ('9dd57f9f-9622-4209-ad87-6a89fe5bfcc9','মাসিক আল ফুরকান — সেপ্টেম্বর ২০২৬ (প্রস্তুতি সংখ্যা-১)','2026-09-01','ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রহ. রিসার্চ ইনস্টিটিউট-এর মুখপত্র। দ্বীনি, ইসলাহি ও ফিকরি সাময়িকী। সম্পাদক: ড. মাওলানা শহীদুল ইসলাম ফারুকী।','/magazines/al-furqan-2026-09.webp','al-furqan-2026-09.pdf',41,1,1788199200,1788652821,1788658155);
+INSERT OR IGNORE INTO magazines (id,title,issue_month,description,cover_url,pdf_url,page_count,is_published,published_at,created_at,updated_at) VALUES ('6a4bed12-3056-45c3-b3ab-853079a4011a','মাসিক আল ফুরকান — অক্টোবর ২০২৬','2026-10-01','ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রহ. রিসার্চ ইনস্টিটিউট-এর মুখপত্র। দ্বীনি, ইসলাহি ও ফিকরি সাময়িকী। অক্টোবর ২০২৬ ঈসায়ী / রবিউস সানি ১৪৪৮ হিজরি।','/magazines/al-furqan-2026-10.webp','al-furqan-2026-10.pdf',40,1,1790791200,1791941118,1791941118);
+
+-- news_posts (3 rows)
+INSERT OR IGNORE INTO news_posts (id,title,excerpt,content,category,image_url,is_published,published_at,created_at) VALUES ('d46a1717-471c-4b08-9f7d-d6e2e1b2106d','Memorandum Signed With Partner Universities','The institute expands its academic collaboration network across South Asia.','A memorandum of understanding was signed to strengthen joint research and student exchange.','Partnership',NULL,1,1782064800,1787245615);
+INSERT OR IGNORE INTO news_posts (id,title,excerpt,content,category,image_url,is_published,published_at,created_at) VALUES ('7e18dc96-e092-41a7-9d97-45077790ee4f','New Volume of the Research Journal Released','The latest issue features peer-reviewed studies on Qur''anic hermeneutics and Islamic law.','The newest volume of the institute journal is now available, featuring peer-reviewed research articles.','Publication',NULL,1,1784311200,1787245615);
+INSERT OR IGNORE INTO news_posts (id,title,excerpt,content,category,image_url,is_published,published_at,created_at) VALUES ('f8579e25-e284-45f1-b7f6-4ce4cca914d4','Institute Launches Digital Manuscript Archive','A new digital archive makes rare manuscripts freely accessible to researchers worldwide.','The institute has launched a digital archive of rare manuscripts, enabling researchers around the world to access classical works.','Announcement',NULL,1,1785520800,1787245615);
+
