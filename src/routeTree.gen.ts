@@ -22,7 +22,6 @@ import { Route as AdminOrdersRouteImport } from './routes/_admin/orders'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as PublicAboutRouteImport } from './routes/_public/about'
 import { Route as PublicAcademicPartnersRouteImport } from './routes/_public/academic-partners'
-import { Route as PublicAdministrationRouteImport } from './routes/_public/administration'
 import { Route as PublicContactRouteImport } from './routes/_public/contact'
 import { Route as PublicDonateRouteImport } from './routes/_public/donate'
 import { Route as PublicFaqRouteImport } from './routes/_public/faq'
@@ -32,9 +31,12 @@ import { Route as AdminAdminBooksRouteImport } from './routes/_admin/admin.books
 import { Route as AdminAdminEventsRouteImport } from './routes/_admin/admin.events'
 import { Route as AdminAdminMagazinesRouteImport } from './routes/_admin/admin.magazines'
 import { Route as AdminAdminNewsRouteImport } from './routes/_admin/admin.news'
+import { Route as AdminAdminPatronsRouteImport } from './routes/_admin/admin.patrons'
 import { Route as AdminAdminShortCoursesRouteImport } from './routes/_admin/admin.short-courses'
 import { Route as AdminAdminUsersRouteImport } from './routes/_admin/admin.users'
 import { Route as PublicAcademicIndexRouteImport } from './routes/_public/academic.index'
+import { Route as PublicAdministrationIndexRouteImport } from './routes/_public/administration.index'
+import { Route as PublicAdministrationPatronsRouteImport } from './routes/_public/administration.patrons'
 import { Route as PublicDigitalLibraryIndexRouteImport } from './routes/_public/digital-library.index'
 import { Route as PublicEventsIndexRouteImport } from './routes/_public/events.index'
 import { Route as PublicMagazineIndexRouteImport } from './routes/_public/magazine.index'
@@ -116,11 +118,6 @@ const PublicAcademicPartnersRoute = PublicAcademicPartnersRouteImport.update({
   path: '/academic-partners',
   getParentRoute: () => PublicRoute,
 } as any)
-const PublicAdministrationRoute = PublicAdministrationRouteImport.update({
-  id: '/administration',
-  path: '/administration',
-  getParentRoute: () => PublicRoute,
-} as any)
 const PublicContactRoute = PublicContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -166,6 +163,11 @@ const AdminAdminNewsRoute = AdminAdminNewsRouteImport.update({
   path: '/admin/news',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAdminPatronsRoute = AdminAdminPatronsRouteImport.update({
+  id: '/admin/patrons',
+  path: '/admin/patrons',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminAdminShortCoursesRoute = AdminAdminShortCoursesRouteImport.update({
   id: '/admin/short-courses',
   path: '/admin/short-courses',
@@ -181,6 +183,18 @@ const PublicAcademicIndexRoute = PublicAcademicIndexRouteImport.update({
   path: '/academic/',
   getParentRoute: () => PublicRoute,
 } as any)
+const PublicAdministrationIndexRoute =
+  PublicAdministrationIndexRouteImport.update({
+    id: '/administration/',
+    path: '/administration/',
+    getParentRoute: () => PublicRoute,
+  } as any)
+const PublicAdministrationPatronsRoute =
+  PublicAdministrationPatronsRouteImport.update({
+    id: '/administration/patrons',
+    path: '/administration/patrons',
+    getParentRoute: () => PublicRoute,
+  } as any)
 const PublicDigitalLibraryIndexRoute =
   PublicDigitalLibraryIndexRouteImport.update({
     id: '/digital-library/',
@@ -286,7 +300,6 @@ export interface FileRoutesByFullPath {
   '/orders': typeof AdminOrdersRoute
   '/about': typeof PublicAboutRoute
   '/academic-partners': typeof PublicAcademicPartnersRoute
-  '/administration': typeof PublicAdministrationRoute
   '/contact': typeof PublicContactRoute
   '/donate': typeof PublicDonateRoute
   '/faq': typeof PublicFaqRoute
@@ -295,8 +308,10 @@ export interface FileRoutesByFullPath {
   '/admin/events': typeof AdminAdminEventsRoute
   '/admin/magazines': typeof AdminAdminMagazinesRoute
   '/admin/news': typeof AdminAdminNewsRoute
+  '/admin/patrons': typeof AdminAdminPatronsRoute
   '/admin/short-courses': typeof AdminAdminShortCoursesRoute
   '/admin/users': typeof AdminAdminUsersRoute
+  '/administration/patrons': typeof PublicAdministrationPatronsRoute
   '/magazine/$id': typeof PublicMagazineIdRoute
   '/payam/$program': typeof PublicPayamProgramRoute
   '/publications/$bookId': typeof PublicPublicationsBookIdRouteWithChildren
@@ -304,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/short-courses/enroll': typeof PublicShortCoursesEnrollRoute
   '/admin/': typeof AdminAdminIndexRoute
   '/academic/': typeof PublicAcademicIndexRoute
+  '/administration/': typeof PublicAdministrationIndexRoute
   '/digital-library/': typeof PublicDigitalLibraryIndexRoute
   '/events/': typeof PublicEventsIndexRoute
   '/magazine/': typeof PublicMagazineIndexRoute
@@ -329,7 +345,6 @@ export interface FileRoutesByTo {
   '/orders': typeof AdminOrdersRoute
   '/about': typeof PublicAboutRoute
   '/academic-partners': typeof PublicAcademicPartnersRoute
-  '/administration': typeof PublicAdministrationRoute
   '/contact': typeof PublicContactRoute
   '/donate': typeof PublicDonateRoute
   '/faq': typeof PublicFaqRoute
@@ -338,14 +353,17 @@ export interface FileRoutesByTo {
   '/admin/events': typeof AdminAdminEventsRoute
   '/admin/magazines': typeof AdminAdminMagazinesRoute
   '/admin/news': typeof AdminAdminNewsRoute
+  '/admin/patrons': typeof AdminAdminPatronsRoute
   '/admin/short-courses': typeof AdminAdminShortCoursesRoute
   '/admin/users': typeof AdminAdminUsersRoute
+  '/administration/patrons': typeof PublicAdministrationPatronsRoute
   '/magazine/$id': typeof PublicMagazineIdRoute
   '/payam/$program': typeof PublicPayamProgramRoute
   '/short-courses/$slug': typeof PublicShortCoursesSlugRoute
   '/short-courses/enroll': typeof PublicShortCoursesEnrollRoute
   '/admin': typeof AdminAdminIndexRoute
   '/academic': typeof PublicAcademicIndexRoute
+  '/administration': typeof PublicAdministrationIndexRoute
   '/digital-library': typeof PublicDigitalLibraryIndexRoute
   '/events': typeof PublicEventsIndexRoute
   '/magazine': typeof PublicMagazineIndexRoute
@@ -373,7 +391,6 @@ export interface FileRoutesById {
   '/_admin/orders': typeof AdminOrdersRoute
   '/_public/about': typeof PublicAboutRoute
   '/_public/academic-partners': typeof PublicAcademicPartnersRoute
-  '/_public/administration': typeof PublicAdministrationRoute
   '/_public/contact': typeof PublicContactRoute
   '/_public/donate': typeof PublicDonateRoute
   '/_public/faq': typeof PublicFaqRoute
@@ -383,8 +400,10 @@ export interface FileRoutesById {
   '/_admin/admin/events': typeof AdminAdminEventsRoute
   '/_admin/admin/magazines': typeof AdminAdminMagazinesRoute
   '/_admin/admin/news': typeof AdminAdminNewsRoute
+  '/_admin/admin/patrons': typeof AdminAdminPatronsRoute
   '/_admin/admin/short-courses': typeof AdminAdminShortCoursesRoute
   '/_admin/admin/users': typeof AdminAdminUsersRoute
+  '/_public/administration/patrons': typeof PublicAdministrationPatronsRoute
   '/_public/magazine/$id': typeof PublicMagazineIdRoute
   '/_public/payam/$program': typeof PublicPayamProgramRoute
   '/_public/publications/$bookId': typeof PublicPublicationsBookIdRouteWithChildren
@@ -392,6 +411,7 @@ export interface FileRoutesById {
   '/_public/short-courses/enroll': typeof PublicShortCoursesEnrollRoute
   '/_admin/admin/': typeof AdminAdminIndexRoute
   '/_public/academic/': typeof PublicAcademicIndexRoute
+  '/_public/administration/': typeof PublicAdministrationIndexRoute
   '/_public/digital-library/': typeof PublicDigitalLibraryIndexRoute
   '/_public/events/': typeof PublicEventsIndexRoute
   '/_public/magazine/': typeof PublicMagazineIndexRoute
@@ -419,7 +439,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/about'
     | '/academic-partners'
-    | '/administration'
     | '/contact'
     | '/donate'
     | '/faq'
@@ -428,8 +447,10 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/magazines'
     | '/admin/news'
+    | '/admin/patrons'
     | '/admin/short-courses'
     | '/admin/users'
+    | '/administration/patrons'
     | '/magazine/$id'
     | '/payam/$program'
     | '/publications/$bookId'
@@ -437,6 +458,7 @@ export interface FileRouteTypes {
     | '/short-courses/enroll'
     | '/admin/'
     | '/academic/'
+    | '/administration/'
     | '/digital-library/'
     | '/events/'
     | '/magazine/'
@@ -462,7 +484,6 @@ export interface FileRouteTypes {
     | '/orders'
     | '/about'
     | '/academic-partners'
-    | '/administration'
     | '/contact'
     | '/donate'
     | '/faq'
@@ -471,14 +492,17 @@ export interface FileRouteTypes {
     | '/admin/events'
     | '/admin/magazines'
     | '/admin/news'
+    | '/admin/patrons'
     | '/admin/short-courses'
     | '/admin/users'
+    | '/administration/patrons'
     | '/magazine/$id'
     | '/payam/$program'
     | '/short-courses/$slug'
     | '/short-courses/enroll'
     | '/admin'
     | '/academic'
+    | '/administration'
     | '/digital-library'
     | '/events'
     | '/magazine'
@@ -505,7 +529,6 @@ export interface FileRouteTypes {
     | '/_admin/orders'
     | '/_public/about'
     | '/_public/academic-partners'
-    | '/_public/administration'
     | '/_public/contact'
     | '/_public/donate'
     | '/_public/faq'
@@ -515,8 +538,10 @@ export interface FileRouteTypes {
     | '/_admin/admin/events'
     | '/_admin/admin/magazines'
     | '/_admin/admin/news'
+    | '/_admin/admin/patrons'
     | '/_admin/admin/short-courses'
     | '/_admin/admin/users'
+    | '/_public/administration/patrons'
     | '/_public/magazine/$id'
     | '/_public/payam/$program'
     | '/_public/publications/$bookId'
@@ -524,6 +549,7 @@ export interface FileRouteTypes {
     | '/_public/short-courses/enroll'
     | '/_admin/admin/'
     | '/_public/academic/'
+    | '/_public/administration/'
     | '/_public/digital-library/'
     | '/_public/events/'
     | '/_public/magazine/'
@@ -638,13 +664,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAcademicPartnersRouteImport
       parentRoute: typeof PublicRoute
     }
-    '/_public/administration': {
-      id: '/_public/administration'
-      path: '/administration'
-      fullPath: '/administration'
-      preLoaderRoute: typeof PublicAdministrationRouteImport
-      parentRoute: typeof PublicRoute
-    }
     '/_public/contact': {
       id: '/_public/contact'
       path: '/contact'
@@ -708,6 +727,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAdminNewsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/_admin/admin/patrons': {
+      id: '/_admin/admin/patrons'
+      path: '/admin/patrons'
+      fullPath: '/admin/patrons'
+      preLoaderRoute: typeof AdminAdminPatronsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/_admin/admin/short-courses': {
       id: '/_admin/admin/short-courses'
       path: '/admin/short-courses'
@@ -727,6 +753,20 @@ declare module '@tanstack/react-router' {
       path: '/academic'
       fullPath: '/academic/'
       preLoaderRoute: typeof PublicAcademicIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/administration/': {
+      id: '/_public/administration/'
+      path: '/administration'
+      fullPath: '/administration/'
+      preLoaderRoute: typeof PublicAdministrationIndexRouteImport
+      parentRoute: typeof PublicRoute
+    }
+    '/_public/administration/patrons': {
+      id: '/_public/administration/patrons'
+      path: '/administration/patrons'
+      fullPath: '/administration/patrons'
+      preLoaderRoute: typeof PublicAdministrationPatronsRouteImport
       parentRoute: typeof PublicRoute
     }
     '/_public/digital-library/': {
@@ -862,6 +902,7 @@ interface AdminRouteChildren {
   AdminAdminEventsRoute: typeof AdminAdminEventsRoute
   AdminAdminMagazinesRoute: typeof AdminAdminMagazinesRoute
   AdminAdminNewsRoute: typeof AdminAdminNewsRoute
+  AdminAdminPatronsRoute: typeof AdminAdminPatronsRoute
   AdminAdminShortCoursesRoute: typeof AdminAdminShortCoursesRoute
   AdminAdminUsersRoute: typeof AdminAdminUsersRoute
   AdminAdminIndexRoute: typeof AdminAdminIndexRoute
@@ -878,6 +919,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAdminEventsRoute: AdminAdminEventsRoute,
   AdminAdminMagazinesRoute: AdminAdminMagazinesRoute,
   AdminAdminNewsRoute: AdminAdminNewsRoute,
+  AdminAdminPatronsRoute: AdminAdminPatronsRoute,
   AdminAdminShortCoursesRoute: AdminAdminShortCoursesRoute,
   AdminAdminUsersRoute: AdminAdminUsersRoute,
   AdminAdminIndexRoute: AdminAdminIndexRoute,
@@ -907,18 +949,19 @@ const PublicPublicationsBookIdRouteWithChildren =
 interface PublicRouteChildren {
   PublicAboutRoute: typeof PublicAboutRoute
   PublicAcademicPartnersRoute: typeof PublicAcademicPartnersRoute
-  PublicAdministrationRoute: typeof PublicAdministrationRoute
   PublicContactRoute: typeof PublicContactRoute
   PublicDonateRoute: typeof PublicDonateRoute
   PublicFaqRoute: typeof PublicFaqRoute
   PublicMembershipRoute: typeof PublicMembershipRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicAdministrationPatronsRoute: typeof PublicAdministrationPatronsRoute
   PublicMagazineIdRoute: typeof PublicMagazineIdRoute
   PublicPayamProgramRoute: typeof PublicPayamProgramRoute
   PublicPublicationsBookIdRoute: typeof PublicPublicationsBookIdRouteWithChildren
   PublicShortCoursesSlugRoute: typeof PublicShortCoursesSlugRoute
   PublicShortCoursesEnrollRoute: typeof PublicShortCoursesEnrollRoute
   PublicAcademicIndexRoute: typeof PublicAcademicIndexRoute
+  PublicAdministrationIndexRoute: typeof PublicAdministrationIndexRoute
   PublicDigitalLibraryIndexRoute: typeof PublicDigitalLibraryIndexRoute
   PublicEventsIndexRoute: typeof PublicEventsIndexRoute
   PublicMagazineIndexRoute: typeof PublicMagazineIndexRoute
@@ -933,18 +976,19 @@ interface PublicRouteChildren {
 const PublicRouteChildren: PublicRouteChildren = {
   PublicAboutRoute: PublicAboutRoute,
   PublicAcademicPartnersRoute: PublicAcademicPartnersRoute,
-  PublicAdministrationRoute: PublicAdministrationRoute,
   PublicContactRoute: PublicContactRoute,
   PublicDonateRoute: PublicDonateRoute,
   PublicFaqRoute: PublicFaqRoute,
   PublicMembershipRoute: PublicMembershipRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicAdministrationPatronsRoute: PublicAdministrationPatronsRoute,
   PublicMagazineIdRoute: PublicMagazineIdRoute,
   PublicPayamProgramRoute: PublicPayamProgramRoute,
   PublicPublicationsBookIdRoute: PublicPublicationsBookIdRouteWithChildren,
   PublicShortCoursesSlugRoute: PublicShortCoursesSlugRoute,
   PublicShortCoursesEnrollRoute: PublicShortCoursesEnrollRoute,
   PublicAcademicIndexRoute: PublicAcademicIndexRoute,
+  PublicAdministrationIndexRoute: PublicAdministrationIndexRoute,
   PublicDigitalLibraryIndexRoute: PublicDigitalLibraryIndexRoute,
   PublicEventsIndexRoute: PublicEventsIndexRoute,
   PublicMagazineIndexRoute: PublicMagazineIndexRoute,

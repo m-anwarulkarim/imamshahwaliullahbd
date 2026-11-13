@@ -40,6 +40,7 @@ const menuGroups = [
     items: [
       { label: "Events", icon: Calendar, href: "/admin/events" },
       { label: "News & Media", icon: Newspaper, href: "/admin/news" },
+      { label: "Patrons", icon: HeartHandshake, href: "/admin/patrons" },
     ]
   },
   {

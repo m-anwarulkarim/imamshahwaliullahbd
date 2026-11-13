@@ -9,6 +9,7 @@ import { useLanguage, type LocalizedText } from "@/lib/i18n";
 import { subscribeToNewsletter } from "@/lib/community";
 
 const resourceLinks: { to: string; label: LocalizedText }[] = [
+  { to: "/administration/patrons", label: { en: "Patron Council", bn: "পৃষ্ঠপোষক পরিষদ", ar: "مجلس الرعاة" } },
   { to: "/research", label: { en: "Research Projects", bn: "গবেষণা প্রকল্প", ar: "المشاريع البحثية" } },
   { to: "/shah-waliullah-portal", label: { en: "Shah Waliullah Portal", bn: "শাহ ওয়ালিউল্লাহ পোর্টাল", ar: "بوابة شاه ولي الله" } },
   { to: "/publications", label: { en: "Latest Publications", bn: "সর্বশেষ প্রকাশনা", ar: "أحدث الإصدارات" } },

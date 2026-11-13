@@ -232,6 +232,28 @@ CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
   "created_at" INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS "patrons" (
+  "id" TEXT PRIMARY KEY,
+  "name" TEXT NOT NULL,
+  "name_en" TEXT,
+  "name_ar" TEXT,
+  "category" TEXT NOT NULL,
+  "designation" TEXT,
+  "designation_en" TEXT,
+  "designation_ar" TEXT,
+  "address" TEXT NOT NULL,
+  "address_en" TEXT,
+  "address_ar" TEXT,
+  "district" TEXT NOT NULL,
+  "phone" TEXT NOT NULL,
+  "secondary_phone" TEXT,
+  "email" TEXT,
+  "image_url" TEXT,
+  "sort_order" INTEGER NOT NULL DEFAULT 0,
+  "is_published" INTEGER NOT NULL DEFAULT 1,
+  "created_at" INTEGER NOT NULL
+);
+
 -- ============================================================
 -- 3. SEED DATA (FROM SUPABASE BACKUP)
 -- ============================================================

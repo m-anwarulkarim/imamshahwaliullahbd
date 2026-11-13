@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, ChevronDown, MoreHorizontal } from "lucide-react";
+import { Menu, ChevronDown, MoreHorizontal, Crown } from "lucide-react";
 // logoAsset import removed to use local public path directly for better production reliability
 import { Button } from "@/components/ui/button";
 import {
@@ -37,11 +37,13 @@ const navLinks = [
   { to: "/events", label: { en: "Events", bn: "কার্যক্রম", ar: "الفعاليات" } },
   { to: "/faq", label: { en: "FAQ", bn: "জিজ্ঞাসা", ar: "الأسئلة الشائعة" } },
   { to: "/membership", label: { en: "Membership", bn: "সদস্যপদ", ar: "العضوية" } },
+  { to: "/administration/patrons", label: { en: "Patron Council", bn: "পৃষ্ঠপোষক পরিষদ", ar: "مجلس الرعاة" } },
   { to: "/contact", label: { en: "Contact", bn: "যোগাযোগ", ar: "اتصل بنا" } },
 ];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isAdminOpen, setIsAdminOpen] = React.useState(false);
   const [isMoreOpen, setIsMoreOpen] = React.useState(false);
   const { t } = useLanguage();
 
@@ -63,16 +65,103 @@ export function Navbar() {
 
         {/* Desktop Navigation */}
         <nav className="hidden xl:flex items-center gap-1">
-          {visibleLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              activeProps={{ className: "text-primary bg-primary/5 font-semibold" }}
-              className="rounded-full px-4 py-2 text-sm font-medium text-foreground/80 transition-all hover:bg-primary/5 hover:text-primary"
-            >
-              {t(link.label)}
-            </Link>
-          ))}
+          {visibleLinks.map((link) => {
+            if (link.to === "/administration") {
+              return (
+                <div
+                  key={link.to}
+                  className="relative"
+                  onMouseEnter={() => setIsAdminOpen(true)}
+                  onMouseLeave={() => setIsAdminOpen(false)}
+                >
+                  <DropdownMenu open={isAdminOpen} onOpenChange={setIsAdminOpen} modal={false}>
+                    <DropdownMenuTrigger asChild>
+                      <Link
+                        to="/administration"
+                        activeProps={{ className: "text-primary bg-primary/5 font-semibold" }}
+                        className={cn(
+                          "flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-foreground/80 transition-all hover:bg-primary/5 hover:text-primary outline-none",
+                          isAdminOpen && "bg-primary/5 text-primary",
+                        )}
+                      >
+                        {t(link.label)}{" "}
+                        <ChevronDown
+                          className={cn(
+                            "h-3.5 w-3.5 transition-transform duration-200",
+                            isAdminOpen && "rotate-180",
+                          )}
+                        />
+                      </Link>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="start"
+                      className="min-w-[280px] border-primary/10 bg-card/95 backdrop-blur-xl p-2 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+                    >
+                      <DropdownMenuItem asChild className="p-0">
+                        <Link
+                          to="/administration"
+                          onClick={() => setIsAdminOpen(false)}
+                          className="flex flex-col items-start rounded-lg px-3 py-2 text-xs transition-colors hover:bg-primary/5 w-full cursor-pointer"
+                        >
+                          <span className="font-semibold text-foreground text-sm">
+                            {t({
+                              en: "Administration & Leadership",
+                              bn: "প্রশাসন ও নেতৃত্ব",
+                              ar: "الإدارة والقيادة",
+                            })}
+                          </span>
+                          <span className="text-[11px] text-muted-foreground mt-0.5">
+                            {t({
+                              en: "Advisory Council & Executive Committee",
+                              bn: "উপদেষ্টা পরিষদ ও পরিচালনা পর্ষদ",
+                              ar: "المجلس الاستشاري واللجنة التنفيذية",
+                            })}
+                          </span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="p-0 mt-1">
+                        <Link
+                          to="/administration/patrons"
+                          onClick={() => setIsAdminOpen(false)}
+                          className="flex flex-col items-start rounded-lg px-3 py-2 text-xs transition-colors hover:bg-primary/5 w-full cursor-pointer bg-accent/5"
+                        >
+                          <span className="font-semibold text-primary text-sm flex items-center gap-1.5">
+                            <Crown className="h-4 w-4 text-accent" />
+                            {t({
+                              en: "Patron Council",
+                              bn: "পৃষ্ঠপোষক পরিষদ",
+                              ar: "مجلس الرعاة",
+                            })}
+                            <span className="rounded bg-accent/20 px-1.5 py-0.2 text-[10px] font-bold text-accent">
+                              {t({ en: "6 Tiers", bn: "৬ ক্যাটাগরি", ar: "٦ فئات" })}
+                            </span>
+                          </span>
+                          <span className="text-[11px] text-muted-foreground mt-0.5">
+                            {t({
+                              en: "Distinguished patrons, contact numbers & directory",
+                              bn: "সম্মানিত পৃষ্ঠপোষক সদস্যবৃন্দ, ঠিকানা ও মোবাইল নম্বর",
+                              ar: "أعضاء مجلس الرعاة وأرقام التواصل والعناوين",
+                            })}
+                          </span>
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={link.to}
+                to={link.to}
+                activeProps={{ className: "text-primary bg-primary/5 font-semibold" }}
+                className="rounded-full px-4 py-2 text-sm font-medium text-foreground/80 transition-all hover:bg-primary/5 hover:text-primary"
+              >
+                {t(link.label)}
+              </Link>
+            );
+          })}
 
           {/* "More" Dropdown */}
           <div 
@@ -149,17 +238,36 @@ export function Navbar() {
                 <nav className="flex-1 overflow-y-auto py-6 px-4">
                   <LanguagePills className="mb-4" />
                   <div className="flex flex-col gap-2">
-                    {navLinks.map((link) => (
-                      <Link
-                        key={link.to}
-                        to={link.to}
-                        onClick={() => setIsOpen(false)}
-                        activeProps={{ className: "bg-primary/10 text-primary font-bold" }}
-                        className="flex items-center rounded-lg px-4 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-primary/5 hover:text-primary"
-                      >
-                        {t(link.label)}
-                      </Link>
-                    ))}
+                    {navLinks
+                      .filter((l) => l.to !== "/administration/patrons")
+                      .map((link) => (
+                        <React.Fragment key={link.to}>
+                          <Link
+                            to={link.to}
+                            onClick={() => setIsOpen(false)}
+                            activeProps={{ className: "bg-primary/10 text-primary font-bold" }}
+                            className="flex items-center rounded-lg px-4 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-primary/5 hover:text-primary"
+                          >
+                            {t(link.label)}
+                          </Link>
+                          {link.to === "/administration" && (
+                            <Link
+                              to="/administration/patrons"
+                              onClick={() => setIsOpen(false)}
+                              activeProps={{ className: "bg-primary/10 text-primary font-bold" }}
+                              className="flex items-center justify-between rounded-lg ml-3 px-4 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-primary/5 hover:text-primary border-l-2 border-accent/40 bg-accent/5"
+                            >
+                              <span className="flex items-center gap-2">
+                                <Crown className="h-4 w-4 text-accent" />
+                                <span>{t({ en: "Patron Council", bn: "পৃষ্ঠপোষক পরিষদ", ar: "مجلس الرعاة" })}</span>
+                              </span>
+                              <span className="rounded bg-accent/20 px-1.5 py-0.5 text-[10px] font-bold text-accent">
+                                {t({ en: "6 Tiers", bn: "৬ ক্যাটাগরি", ar: "٦ فئات" })}
+                              </span>
+                            </Link>
+                          )}
+                        </React.Fragment>
+                      ))}
                   </div>
                 </nav>
                 <div className="border-t border-primary/10 p-6">
