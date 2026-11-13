@@ -2,17 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DonationForm } from "@/components/home/DonationForm";
 import { PaymentDetails } from "@/components/shared/PaymentDetails";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/donate")({
-  head: () => ({
-    meta: [
-      { title: "Donate — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Support our mission and research initiatives. Your contributions help us continue our scholarly work." },
-      { property: "og:title", content: "Support the Institute — Donate Now" },
-      { property: "og:description", content: "Help us preserve Islamic heritage and advance scholarly research." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Donate — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Support our mission and research initiatives. Your contributions help us continue our scholarly work.",
+    path: "/donate",
   }),
   component: DonatePage,
 });

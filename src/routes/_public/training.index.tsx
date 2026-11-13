@@ -3,21 +3,13 @@ import { motion } from "framer-motion";
 import { GraduationCap, Monitor, Wrench, Presentation, Users2, Video, Sun } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/training/")({
-  head: () => ({
-    meta: [
-      { title: "Training & Capacity Building — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        name: "description",
-        content:
-          "Certificate courses, online courses, workshops, seminars, conferences, webinars and summer school programmes.",
-      },
-      { property: "og:title", content: "Training & Capacity Building" },
-      { property: "og:description", content: "Build research skills through our courses, workshops and summer school." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Training & Capacity Building — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Certificate courses, online courses, workshops, seminars, conferences, webinars and summer school programmes.",
+    path: "/training",
   }),
   component: TrainingPage,
 });

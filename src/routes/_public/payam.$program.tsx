@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, CheckCircle2, ListChecks, HeartHandshake } from "lucide-react";
 import { getPayamProgram, payamPrograms } from "@/lib/payam-programs";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/payam/$program")({
   beforeLoad: ({ params }) => {
@@ -10,18 +11,13 @@ export const Route = createFileRoute("/_public/payam/$program")({
   },
   head: ({ params }) => {
     const p = getPayamProgram(params.program);
-    const title = `${p?.title.en ?? "Program"} — Payam-e-Insaniyat Bangladesh`;
-    const desc = p?.desc.en ?? "";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: desc },
-        { property: "og:title", content: title },
-        { property: "og:description", content: desc },
-        { property: "og:type", content: "article" },
-        { name: "twitter:card", content: "summary" },
-      ],
-    };
+    return seo({
+      title: `${p?.title.en ?? "Program"} — Payam-e-Insaniyat Bangladesh`,
+      description: p?.desc.en ?? "",
+      path: `/payam/${params.program}`,
+      ogType: "article",
+      twitterCard: "summary",
+    });
   },
   component: PayamProgramPage,
 });

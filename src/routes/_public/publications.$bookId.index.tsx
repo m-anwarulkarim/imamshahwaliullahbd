@@ -4,6 +4,7 @@ import { getBookById } from "@/lib/books";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, BookOpen, Truck, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { seo, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/publications/$bookId/")({
   loader: ({ params, context }) =>
@@ -13,7 +14,6 @@ export const Route = createFileRoute("/_public/publications/$bookId/")({
     }),
   head: ({ loaderData, params }) => {
     const b = loaderData;
-    const url = `https://imamshahwaliullahbd.com/publications/${params.bookId}`;
     const title = `${b?.title ?? "Book"} — ${b?.author ?? "ISWDRI"} | Imam Shah Waliullah Dehlawi Research Institute`;
     const description = (
       b?.description ||
@@ -22,52 +22,39 @@ export const Route = createFileRoute("/_public/publications/$bookId/")({
     const image = b?.coverUrl?.startsWith("http")
       ? b.coverUrl
       : b?.coverUrl
-        ? `https://imamshahwaliullahbd.com${b.coverUrl}`
+        ? `${SITE_URL}${b.coverUrl}`
         : undefined;
-    return {
-      meta: [
-        { title },
-        { name: "description", content: description },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "book" },
-        { name: "twitter:card", content: "summary_large_image" },
-        ...(image
-          ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }]
-          : []),
-      ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: b
-        ? [
-            {
-              type: "application/ld+json",
-              children: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": ["Book", "Product"],
-                name: b.title,
-                author: { "@type": "Person", name: b.author },
-                ...(image ? { image } : {}),
-                ...(b.description ? { description: b.description } : {}),
-                publisher: {
-                  "@type": "Organization",
-                  name: "Imam Shah Waliullah Dehlawi Research Institute",
-                },
-                offers: {
-                  "@type": "Offer",
-                  price: b.price,
-                  priceCurrency: "BDT",
-                  availability:
-                    (b.stock ?? 1) > 0
-                      ? "https://schema.org/InStock"
-                      : "https://schema.org/OutOfStock",
-                  url,
-                },
-              }),
+    return seo({
+      title,
+      description,
+      path: `/publications/${params.bookId}`,
+      ogImage: image,
+      ogType: "book",
+      jsonLd: b
+        ? {
+            "@context": "https://schema.org",
+            "@type": ["Book", "Product"],
+            name: b.title,
+            author: { "@type": "Person", name: b.author },
+            ...(image ? { image } : {}),
+            ...(b.description ? { description: b.description } : {}),
+            publisher: {
+              "@type": "Organization",
+              name: "Imam Shah Waliullah Dehlawi Research Institute",
             },
-          ]
-        : [],
-    };
+            offers: {
+              "@type": "Offer",
+              price: b.price,
+              priceCurrency: "BDT",
+              availability:
+                (b.stock ?? 1) > 0
+                  ? "https://schema.org/InStock"
+                  : "https://schema.org/OutOfStock",
+              url: `${SITE_URL}/publications/${params.bookId}`,
+            },
+          }
+        : undefined,
+    });
   },
   component: BookDetailsPage,
 });

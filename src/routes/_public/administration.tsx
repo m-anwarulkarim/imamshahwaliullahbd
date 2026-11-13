@@ -3,20 +3,13 @@ import { motion } from "framer-motion";
 import { Users, Briefcase, Quote } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/administration")({
-  head: () => ({
-    meta: [
-      { title: "Administration — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        name: "description",
-        content: "Advisory Council, Executive Committee, Chairman and Executive Director of the institute.",
-      },
-      { property: "og:title", content: "Administration — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Meet the leadership and governing bodies guiding our scholarly work." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Administration — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Advisory Council, Executive Committee, Chairman and Executive Director of the institute.",
+    path: "/administration",
   }),
   component: AdministrationPage,
 });

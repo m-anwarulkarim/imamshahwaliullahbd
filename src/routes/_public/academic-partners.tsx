@@ -3,24 +3,13 @@ import { motion } from "framer-motion";
 import { Building2, Handshake, Globe2, FileSignature } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/academic-partners")({
-  head: () => ({
-    meta: [
-      { title: "Academic Partners & Collaborations — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        name: "description",
-        content:
-          "Universities, research centres and academic bodies collaborating with the institute on research, publishing and training.",
-      },
-      { property: "og:title", content: "Academic Partners & Collaborations" },
-      {
-        property: "og:description",
-        content: "Our national and international partnerships in Islamic research and scholarship.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Academic Partners & Collaborations — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Universities, research centres and academic bodies collaborating with the institute on research, publishing and training.",
+    path: "/academic-partners",
   }),
   component: PartnersPage,
 });

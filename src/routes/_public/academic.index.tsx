@@ -14,17 +14,13 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/academic/")({
-  head: () => ({
-    meta: [
-      { property: "og:title", content: "Academic Departments — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Islamic academic departments and scholarly research at the institute." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { title: "Academic Departments — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Explore our specialized academic departments dedicated to Islamic scholarship and research." },
-    ],
+  head: () => seo({
+    title: "Academic Departments — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Explore our specialized academic departments dedicated to Islamic scholarship and research.",
+    path: "/academic",
   }),
   component: AcademicPage,
 });

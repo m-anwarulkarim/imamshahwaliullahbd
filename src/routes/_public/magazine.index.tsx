@@ -5,17 +5,13 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Button } from "@/components/ui/button";
 import { formatIssueMonth, getPublishedMagazines } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/magazine/")({
-  head: () => ({
-    meta: [
-      { title: "Monthly Al Furqan — Magazine Archive | ISWDRI" },
-      { name: "description", content: "Read every issue of মাসিক আল ফুরকান, the monthly magazine of Imam Shah Waliullah Dehlawi Research Institute." },
-      { property: "og:title", content: "Monthly Al Furqan — Magazine Archive | ISWDRI" },
-      { property: "og:description", content: "Read online the institute's monthly Islamic research magazine." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Monthly Al Furqan — Magazine Archive | ISWDRI",
+    description: "Read every issue of মাসিক আল ফুরকান, the monthly magazine of Imam Shah Waliullah Dehlawi Research Institute.",
+    path: "/magazine",
   }),
   loader: () => getPublishedMagazines(),
   errorComponent: () => (

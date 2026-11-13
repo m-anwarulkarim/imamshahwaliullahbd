@@ -5,17 +5,13 @@ import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getPublishedEvents } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/events/")({
-  head: () => ({
-    meta: [
-      { title: "Programs & Events — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Upcoming and past seminars, conferences, workshops and public lectures." },
-      { property: "og:title", content: "Programs & Events — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Join our seminars, conferences and public lectures on Islamic scholarship." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Programs & Events — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Upcoming and past seminars, conferences, workshops and public lectures.",
+    path: "/events",
   }),
   loader: () => getPublishedEvents(),
   component: EventsPage,

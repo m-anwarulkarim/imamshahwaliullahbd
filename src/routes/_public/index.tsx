@@ -18,6 +18,7 @@ import { useLanguage } from "@/lib/i18n";
 import { getFeaturedBooks } from "@/lib/books";
 import { getPublishedEvents, getPublishedCourses } from "@/lib/content";
 import { getPublishedMagazines } from "@/lib/content";
+import { seo, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/")({
   loader: async () => {
@@ -30,66 +31,52 @@ export const Route = createFileRoute("/_public/")({
     return { books, events, magazines, courses };
   },
   head: () => {
-    const url = "https://imamshahwaliullahbd.com/";
     const title = "Imam Shah Waliullah Dehlawi Research Institute | ইমাম শাহ ওয়ালিউল্লাহ";
     const description =
       "Imam Shah Waliullah Dehlawi Research Institute, Dhaka — the official site dedicated to Imam Shah Waliullah: research, publications, মাসিক আল ফুরকান, courses and seminars. ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রিসার্চ ইনস্টিটিউট।";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: description },
-        { name: "keywords", content: "imam shah waliullah, Imam Shah Waliullah, Imam Shah Waliullah Dehlawi, Imam Shah Waliullah Dehlawi Research Institute, Shah Waliullah Research Institute, Shah Waliullah Dehlawi, ইমাম শাহ ওয়ালিউল্লাহ, ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রিসার্চ ইনস্টিটিউট, শাহ ওয়ালিউল্লাহ দেহলভী, الإمام شاه ولي الله الدهلوي, معهد الإمام شاه ولي الله الدهلوي للدراسات والبحوث, Islamic research Bangladesh, মাসিক আল ফুরকান" },
-        { property: "og:title", content: title },
-        { property: "og:description", content: description },
-        { property: "og:url", content: url },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: title },
-        { name: "twitter:description", content: description },
-      ],
-      links: [{ rel: "canonical", href: url }],
-      scripts: [
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "EducationalOrganization",
-            name: "Imam Shah Waliullah Dehlawi Research Institute",
-            alternateName: [
-              "Imam Shah Waliullah",
-              "Imam Shah Waliullah Research Institute",
-              "Shah Waliullah Research Institute",
-              "ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রিসার্চ ইনস্টিটিউট",
-              "معهد الإمام شاه ولي الله الدهلوي للدراسات والبحوث",
-            ],
-            description,
-            foundingLocation: "Dhaka, Bangladesh",
-            knowsAbout: ["Imam Shah Waliullah Dehlawi", "Hujjatullah al-Baligha", "Maqasid al-Shariah", "Islamic research"],
-            areaServed: "Bangladesh",
-            url,
-            logo: "https://imamshahwaliullahbd.com/logo.webp",
-            telephone: ["+8801974392665", "+8801774392665"],
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "House 206, Road 11, Block B, Mirpur-12, Pallabi",
-              addressLocality: "Dhaka",
-              postalCode: "1216",
-              addressCountry: "BD",
-            },
-          }),
+    const head = seo({
+      title,
+      description,
+      path: "/",
+      keywords: "imam shah waliullah, Imam Shah Waliullah, Imam Shah Waliullah Dehlawi, Imam Shah Waliullah Dehlawi Research Institute, Shah Waliullah Research Institute, Shah Waliullah Dehlawi, ইমাম শাহ ওয়ালিউল্লাহ, ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রিসার্চ ইনস্টিটিউট, শাহ ওয়ালিউল্লাহ দেহলভী, الإمام شاه ولي الله الدهلوي, معهد الإمام شاه ولي الله الدهلوي للدراسات والبحوث, Islamic research Bangladesh, মাসিক আল ফুরকান",
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        name: "Imam Shah Waliullah Dehlawi Research Institute",
+        alternateName: [
+          "Imam Shah Waliullah",
+          "Imam Shah Waliullah Research Institute",
+          "Shah Waliullah Research Institute",
+          "ইমাম শাহ ওয়ালিউল্লাহ দেহলভী রিসার্চ ইনস্টিটিউট",
+          "معهد الإمام شاه ولي الله الدهلوي للدراسات والبحوث",
+        ],
+        description,
+        foundingLocation: "Dhaka, Bangladesh",
+        knowsAbout: ["Imam Shah Waliullah Dehlawi", "Hujjatullah al-Baligha", "Maqasid al-Shariah", "Islamic research"],
+        areaServed: "Bangladesh",
+        url: SITE_URL,
+        logo: `${SITE_URL}/logo.webp`,
+        telephone: ["+8801974392665", "+8801774392665"],
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "House 206, Road 11, Block B, Mirpur-12, Pallabi",
+          addressLocality: "Dhaka",
+          postalCode: "1216",
+          addressCountry: "BD",
         },
-        {
-          type: "application/ld+json",
-          children: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "Imam Shah Waliullah Dehlawi Research Institute",
-            url,
-            inLanguage: ["bn", "en", "ar"],
-          }),
-        },
-      ],
-    };
+      },
+    });
+    head.scripts.push({
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Imam Shah Waliullah Dehlawi Research Institute",
+        url: SITE_URL,
+        inLanguage: ["bn", "en", "ar"],
+      }),
+    });
+    return head;
   },
   component: Index,
 });

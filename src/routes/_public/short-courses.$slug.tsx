@@ -3,6 +3,7 @@ import { ArrowLeft, GraduationCap, BookOpen, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getCourseBySlug } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 import type { shortCourses } from "../../../drizzle/schema/courses";
 import type { InferSelectModel } from "drizzle-orm";
 
@@ -10,18 +11,15 @@ type Course = InferSelectModel<typeof shortCourses>;
 
 export const Route = createFileRoute("/_public/short-courses/$slug")({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  head: ({ loaderData }: any) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.titleEn} — Short Courses | ISWDRI` },
-          { name: "description", content: loaderData.subtitleEn ?? `Enrol in ${loaderData.titleEn}` },
-          { property: "og:title", content: loaderData.titleEn },
-          { property: "og:description", content: loaderData.subtitleEn ?? "" },
-          { property: "og:type", content: "article" },
-          { name: "twitter:card", content: "summary_large_image" },
-        ]
-      : [{ title: "Short Course — ISWDRI" }],
-  }),
+  head: ({ loaderData, params }: any) => {
+    if (!loaderData) return { meta: [{ title: "Short Course — ISWDRI" }] };
+    return seo({
+      title: `${loaderData.titleEn} — Short Courses | ISWDRI`,
+      description: loaderData.subtitleEn ?? `Enrol in ${loaderData.titleEn}`,
+      path: `/short-courses/${params.slug}`,
+      ogType: "article",
+    });
+  },
   loader: async ({ params }): Promise<Course> => {
     const course = await getCourseBySlug({ data: { slug: params.slug } });
     if (!course) throw notFound();

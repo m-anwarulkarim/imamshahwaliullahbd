@@ -11,17 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
 import { submitContactMessage } from "@/lib/community";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact Us — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Reach the institute for research enquiries, admissions, collaborations and media requests." },
-      { property: "og:title", content: "Contact Us — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Office address, phone, email and a direct enquiry form." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Contact Us — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Reach the institute for research enquiries, admissions, collaborations and media requests.",
+    path: "/contact",
   }),
   component: ContactPage,
 });

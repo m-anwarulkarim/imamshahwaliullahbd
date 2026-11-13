@@ -4,24 +4,13 @@ import { BookOpen, Compass, Target, Gem, Scale, HandHeart, Lightbulb, ShieldChec
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { InstituteGallery } from "@/components/about/InstituteGallery";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/about")({
-  head: () => ({
-    meta: [
-      { title: "About the Institute — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        name: "description",
-        content:
-          "Introduction, vision, mission, aims and core values of the Imam Shah Waliullah Dehlawi Research Institute.",
-      },
-      { property: "og:title", content: "About the Institute — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        property: "og:description",
-        content: "Our scholarly foundation: vision, mission, objectives and the values that guide our research.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "About the Institute — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Introduction, vision, mission, aims and core values of the Imam Shah Waliullah Dehlawi Research Institute.",
+    path: "/about",
   }),
   component: AboutPage,
 });

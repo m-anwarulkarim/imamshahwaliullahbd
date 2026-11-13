@@ -6,17 +6,13 @@ import { Search, Filter, BookOpen, GraduationCap, History, Landmark } from "luci
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/publications/")({
-  head: () => ({
-    meta: [
-      { property: "og:title", content: "Publications — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Browse institute books, journals and scholarly publications." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { title: "Publications — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Explore our collection of scholarly books, research papers, and journals." },
-    ],
+  head: () => seo({
+    title: "Publications — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Explore our collection of scholarly books, research papers, and journals.",
+    path: "/publications",
   }),
   loader: async ({ context }) => {
     return context.queryClient.ensureQueryData({

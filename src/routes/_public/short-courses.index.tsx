@@ -5,17 +5,13 @@ import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { Button } from "@/components/ui/button";
 import { getPublishedCourses } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/short-courses/")({
-  head: () => ({
-    meta: [
-      { title: "Short Courses — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Enrol in our short Islamic research and scholarship courses." },
-      { property: "og:title", content: "Short Courses — ISWDRI" },
-      { property: "og:description", content: "Structured short courses in Islamic scholarship and research methodology." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Short Courses — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Enrol in our short Islamic research and scholarship courses.",
+    path: "/short-courses",
   }),
   loader: () => getPublishedCourses(),
   component: ShortCoursesPage,

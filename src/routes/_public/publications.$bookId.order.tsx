@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { z } from "zod";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 const errorMessages = {
   nameMin: { en: "Please enter your full name", bn: "অনুগ্রহ করে আপনার পূর্ণ নাম লিখুন", ar: "يرجى إدخال اسمك الكامل" },
@@ -19,15 +20,12 @@ const errorMessages = {
 } satisfies Record<string, LocalizedText>;
 
 export const Route = createFileRoute("/_public/publications/$bookId/order")({
-  head: ({ loaderData }) => ({
-    meta: [
-      { property: "og:title", content: "Order a Book — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Submit a purchase order for institute publications." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { title: `Order ${(loaderData as any)?.title || "Book"} — ISWDRI` },
-      { name: "description", content: "Place your order for ISWDRI publications." },
-    ],
+  head: ({ loaderData, params }) => seo({
+    title: `Order ${(loaderData as any)?.title || "Book"} — ISWDRI`,
+    description: "Place your order for ISWDRI publications.",
+    path: `/publications/${params.bookId}/order`,
+    noindex: true,
+    twitterCard: "summary",
   }),
   loader: async ({ context, params }) => {
     return context.queryClient.ensureQueryData({

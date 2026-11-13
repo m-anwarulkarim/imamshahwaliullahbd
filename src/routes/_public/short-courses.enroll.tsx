@@ -10,13 +10,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/i18n";
 import { submitCourseEnrollment } from "@/lib/courses";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/short-courses/enroll")({
-  head: () => ({
-    meta: [
-      { title: "Enrol in a Course — ISWDRI" },
-      { name: "description", content: "Submit your enrolment application for a short course at ISWDRI." },
-    ],
+  head: () => seo({
+    title: "Enrol in a Course — ISWDRI",
+    description: "Submit your enrolment application for a short course at ISWDRI.",
+    path: "/short-courses/enroll",
+    noindex: true,
   }),
   validateSearch: z.object({ course: z.string().optional() }),
   component: EnrollPage,

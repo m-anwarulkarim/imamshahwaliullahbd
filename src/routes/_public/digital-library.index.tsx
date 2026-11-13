@@ -3,20 +3,13 @@ import { motion } from "framer-motion";
 import { Library, BookOpen, Headphones, Film, Download, Search } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/digital-library/")({
-  head: () => ({
-    meta: [
-      { title: "Digital Library — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        name: "description",
-        content: "E-library, e-books, audio library, video library and downloadable research resources.",
-      },
-      { property: "og:title", content: "Digital Library — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Free scholarly resources: e-books, lectures, recordings and downloads." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Digital Library — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "E-library, e-books, audio library, video library and downloadable research resources.",
+    path: "/digital-library",
   }),
   component: DigitalLibraryPage,
 });

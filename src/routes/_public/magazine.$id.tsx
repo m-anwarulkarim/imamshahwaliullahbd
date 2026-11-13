@@ -3,6 +3,7 @@ import { ArrowLeft, BookOpen, Download, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getMagazineById, magazineReadUrl, magazineDownloadUrl, formatIssueMonth } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { seo, SITE_URL } from "@/lib/seo";
 import type { magazines } from "../../../drizzle/schema/content";
 import type { InferSelectModel } from "drizzle-orm";
 
@@ -10,18 +11,21 @@ type Magazine = InferSelectModel<typeof magazines>;
 
 export const Route = createFileRoute("/_public/magazine/$id")({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  head: ({ loaderData }: any) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.title} — Monthly Al Furqan | ISWDRI` },
-          { name: "description", content: loaderData.description ?? `Read ${loaderData.title} online.` },
-          { property: "og:title", content: loaderData.title },
-          { property: "og:description", content: loaderData.description ?? "" },
-          { property: "og:type", content: "article" },
-          { name: "twitter:card", content: "summary_large_image" },
-        ]
-      : [{ title: "Magazine Issue — ISWDRI" }],
-  }),
+  head: ({ loaderData, params }: any) => {
+    if (!loaderData) return { meta: [{ title: "Magazine Issue — ISWDRI" }] };
+    const coverImage = loaderData.coverUrl?.startsWith("http")
+      ? loaderData.coverUrl
+      : loaderData.coverUrl
+        ? `${SITE_URL}${loaderData.coverUrl}`
+        : undefined;
+    return seo({
+      title: `${loaderData.title} — Monthly Al Furqan | ISWDRI`,
+      description: loaderData.description ?? `Read ${loaderData.title} online.`,
+      path: `/magazine/${params.id}`,
+      ogImage: coverImage,
+      ogType: "article",
+    });
+  },
   loader: async ({ params }): Promise<Magazine> => {
     const magazine = await getMagazineById({ data: { id: params.id } });
     if (!magazine) throw notFound();

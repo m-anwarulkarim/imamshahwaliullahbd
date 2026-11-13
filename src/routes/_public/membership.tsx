@@ -12,17 +12,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
 import { submitMembershipApplication } from "@/lib/community";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/membership")({
-  head: () => ({
-    meta: [
-      { title: "Membership — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Join as a donor member, research fellow, volunteer or intern at the institute." },
-      { property: "og:title", content: "Membership — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Donor membership, research fellowship, volunteering and internship opportunities." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Membership — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Join as a donor member, research fellow, volunteer or intern at the institute.",
+    path: "/membership",
   }),
   component: MembershipPage,
 });

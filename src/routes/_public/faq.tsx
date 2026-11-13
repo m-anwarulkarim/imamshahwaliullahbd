@@ -2,17 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/faq")({
-  head: () => ({
-    meta: [
-      { title: "Frequently Asked Questions — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Answers about admissions, fellowships, publications, donations and the digital library." },
-      { property: "og:title", content: "Frequently Asked Questions" },
-      { property: "og:description", content: "Common questions about the institute, its research, courses and publications." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Frequently Asked Questions — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Answers about admissions, fellowships, publications, donations and the digital library.",
+    path: "/faq",
   }),
   component: FAQPage,
 });

@@ -3,40 +3,28 @@ import { motion } from "framer-motion";
 import { User, Network, BookMarked, Sparkles, ScrollText, Library, Archive, Images } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/shah-waliullah-portal/")({
-  head: () => ({
-    meta: [
-      { title: "Imam Shah Waliullah Dehlawi — Life, Works & Legacy | ইমাম শাহ ওয়ালিউল্লাহ" },
-      {
-        name: "description",
-        content:
-          "Imam Shah Waliullah Dehlawi (1703–1762): biography, family tree, Hujjatullah al-Baligha and other works, legacy and archive — by Imam Shah Waliullah Dehlawi Research Institute.",
+  head: () => {
+    const head = seo({
+      title: "Imam Shah Waliullah Dehlawi — Life, Works & Legacy | ইমাম শাহ ওয়ালিউল্লাহ",
+      description: "Imam Shah Waliullah Dehlawi (1703–1762): biography, family tree, Hujjatullah al-Baligha and other works, legacy and archive — by Imam Shah Waliullah Dehlawi Research Institute.",
+      path: "/shah-waliullah-portal",
+      keywords: "imam shah waliullah, Imam Shah Waliullah, Imam Shah Waliullah Dehlawi, Shah Waliullah Dehlawi biography, ইমাম শাহ ওয়ালিউল্লাহ, শাহ ওয়ালিউল্লাহ দেহলভী, الإمام شاه ولي الله الدهلوي",
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Imam Shah Waliullah Dehlawi",
+        alternateName: ["Imam Shah Waliullah", "Shah Waliullah Dehlawi", "ইমাম শাহ ওয়ালিউল্লাহ দেহলভী", "شاه ولي الله الدهلوي"],
+        birthDate: "1703",
+        deathDate: "1762",
+        birthPlace: "Delhi",
+        url: "https://imamshahwaliullahbd.com/shah-waliullah-portal",
       },
-      { name: "keywords", content: "imam shah waliullah, Imam Shah Waliullah, Imam Shah Waliullah Dehlawi, Shah Waliullah Dehlawi biography, ইমাম শাহ ওয়ালিউল্লাহ, শাহ ওয়ালিউল্লাহ দেহলভী, الإمام شاه ولي الله الدهلوي" },
-      { property: "og:title", content: "Imam Shah Waliullah Dehlawi — Life, Works & Legacy" },
-      { property: "og:description", content: "A dedicated portal to the life, works and legacy of Imam Shah Waliullah Dehlawi." },
-      { property: "og:url", content: "https://imamshahwaliullahbd.com/shah-waliullah-portal" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-    links: [{ rel: "canonical", href: "https://imamshahwaliullahbd.com/shah-waliullah-portal" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          name: "Imam Shah Waliullah Dehlawi",
-          alternateName: ["Imam Shah Waliullah", "Shah Waliullah Dehlawi", "ইমাম শাহ ওয়ালিউল্লাহ দেহলভী", "شاه ولي الله الدهلوي"],
-          birthDate: "1703",
-          deathDate: "1762",
-          birthPlace: "Delhi",
-          url: "https://imamshahwaliullahbd.com/shah-waliullah-portal",
-        }),
-      },
-    ],
-  }),
+    });
+    return head;
+  },
   component: PortalPage,
 });
 

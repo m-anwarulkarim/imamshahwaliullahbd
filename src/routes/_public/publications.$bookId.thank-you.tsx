@@ -2,8 +2,15 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useLanguage } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Home } from "lucide-react";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/publications/$bookId/thank-you")({
+  head: ({ params }) => seo({
+    title: "Thank You — Order Confirmed | ISWDRI",
+    description: "Your book order has been confirmed. Thank you for your purchase.",
+    path: `/publications/${params.bookId}/thank-you`,
+    noindex: true,
+  }),
   component: ThankYouPage,
 });
 

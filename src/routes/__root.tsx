@@ -83,7 +83,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "Imam Shah Waliullah Dehlawi Research Institute" },
       { property: "og:locale", content: "bn_BD" },
+      { property: "og:image", content: "https://imamshahwaliullahbd.com/logo.webp" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://imamshahwaliullahbd.com/logo.webp" },
       { name: "theme-color", content: "#0f5132" },
     ],
     links: [
@@ -108,7 +110,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="bn">
       <head>
         <HeadContent />
       </head>

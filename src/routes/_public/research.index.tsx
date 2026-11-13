@@ -14,21 +14,13 @@ import {
 } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { useLanguage, type LocalizedText } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/research/")({
-  head: () => ({
-    meta: [
-      { title: "Research Departments — Imam Shah Waliullah Dehlawi Research Institute" },
-      {
-        name: "description",
-        content:
-          "Current and completed research projects, articles, fellows, call for papers and research grants at the institute.",
-      },
-      { property: "og:title", content: "Research Departments — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Explore our ongoing scholarly projects, fellows and grant programmes." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "Research Departments — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Current and completed research projects, articles, fellows, call for papers and research grants at the institute.",
+    path: "/research",
   }),
   component: ResearchPage,
 });

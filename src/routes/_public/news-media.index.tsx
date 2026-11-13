@@ -4,17 +4,13 @@ import { Newspaper, Radio, Mail, Camera } from "lucide-react";
 import { PageHero, SectionHeading } from "@/components/layout/PageHero";
 import { getPublishedNews } from "@/lib/content";
 import { useLanguage } from "@/lib/i18n";
+import { seo } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/news-media/")({
-  head: () => ({
-    meta: [
-      { title: "News & Media — Imam Shah Waliullah Dehlawi Research Institute" },
-      { name: "description", content: "Institute news, press releases, newsletter archive and media gallery." },
-      { property: "og:title", content: "News & Media — Imam Shah Waliullah Dehlawi Research Institute" },
-      { property: "og:description", content: "Latest announcements, press coverage and media from the institute." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+  head: () => seo({
+    title: "News & Media — Imam Shah Waliullah Dehlawi Research Institute",
+    description: "Institute news, press releases, newsletter archive and media gallery.",
+    path: "/news-media",
   }),
   loader: () => getPublishedNews(),
   component: NewsMediaPage,
