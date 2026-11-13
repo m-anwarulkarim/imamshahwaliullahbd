@@ -142,10 +142,12 @@ export function createHttpD1(): D1Database | null {
 
   if (!accountId || !databaseId) return null;
 
+  // Prefer wrangler's cached OAuth token (from `wrangler login`) because the
+  // .env cfut_ token does not authenticate against the D1 REST API.
   const apiToken =
+    readWranglerOAuthToken() ||
     process.env["CLOUDFLARE_D1_TOKEN"] ||
-    process.env["CLOUDFLARE_API_TOKEN"] ||
-    readWranglerOAuthToken();
+    process.env["CLOUDFLARE_API_TOKEN"];
 
   if (!apiToken) return null;
 
