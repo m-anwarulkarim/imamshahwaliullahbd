@@ -30,3 +30,10 @@ bucket_name = "iswdri-images"
 [[r2_buckets]]
 binding = "PDFS"
 bucket_name = "iswdri-pdfs"
+
+# ============================================================
+# Custom Domains — Cloudflare DNS e zone thakte hobe
+# ============================================================
+routes = [
+  { pattern = "test.imamshahwaliullahbd.com", custom_domain = true },
+]

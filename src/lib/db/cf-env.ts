@@ -4,7 +4,9 @@ let httpFallbackCached: { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket } 
 
 /** Access Cloudflare Worker bindings from any TanStack Start server context. */
 export function getCfEnv(): { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket } {
-  const globalEnv = (globalThis as Record<string, unknown>)["__CF_ENV__"] as
+  // Nitro's Cloudflare preset uses __env__; the custom server.ts uses __CF_ENV__.
+  const globalEnv = ((globalThis as Record<string, unknown>)["__CF_ENV__"] ??
+    (globalThis as Record<string, unknown>)["__env__"]) as
     | { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket }
     | undefined;
   if (globalEnv?.DB) return globalEnv;
