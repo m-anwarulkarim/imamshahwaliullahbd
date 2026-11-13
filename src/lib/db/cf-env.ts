@@ -1,5 +1,3 @@
-import { createHttpD1 } from "./d1-http";
-
 let httpFallbackCached: { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket } | null = null;
 
 /** Access Cloudflare Worker bindings from any TanStack Start server context. */
@@ -29,13 +27,20 @@ export function getCfEnv(): { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucke
     return procEnv.env as { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket };
   }
 
-  // Fallback: vite dev (Node.js) — use D1 HTTP API with .env credentials
+  // Fallback: vite dev (Node.js) — lazy-import d1-http to avoid pulling
+  // Node.js `fs`/`path` into the Cloudflare Workers bundle.
   if (httpFallbackCached) return httpFallbackCached;
   if (procEnv?.env) {
-    const db = createHttpD1();
-    if (db) {
-      httpFallbackCached = { DB: db } as { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket };
-      return httpFallbackCached;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { createHttpD1 } = require("./d1-http") as { createHttpD1: () => D1Database | null };
+      const db = createHttpD1();
+      if (db) {
+        httpFallbackCached = { DB: db } as { DB?: D1Database; IMAGES?: R2Bucket; PDFS?: R2Bucket };
+        return httpFallbackCached;
+      }
+    } catch {
+      // Not in Node.js (e.g. Cloudflare Workers) — skip HTTP fallback
     }
   }
 
