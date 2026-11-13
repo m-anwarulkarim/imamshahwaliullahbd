@@ -8,12 +8,13 @@ import { shortCourses } from "../../../drizzle/schema/courses";
 export const getPublishedEvents = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db
+    return await db
       .select()
       .from(events)
       .where(eq(events.isPublished, true))
       .orderBy(desc(events.eventDate));
-  } catch {
+  } catch (e) {
+    console.error("getPublishedEvents failed:", e);
     return [];
   }
 });
@@ -21,13 +22,14 @@ export const getPublishedEvents = createServerFn({ method: "GET" }).handler(asyn
 export const getPayamItems = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db
+    return await db
       .select()
       .from(events)
       .where(eq(events.category, "payam-e-insaniyat"))
       .orderBy(desc(events.eventDate))
       .limit(8);
-  } catch {
+  } catch (e) {
+    console.error("getPayamItems failed:", e);
     return [];
   }
 });
@@ -35,12 +37,13 @@ export const getPayamItems = createServerFn({ method: "GET" }).handler(async () 
 export const getPublishedNews = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db
+    return await db
       .select()
       .from(newsPosts)
       .where(eq(newsPosts.isPublished, true))
       .orderBy(desc(newsPosts.publishedAt));
-  } catch {
+  } catch (e) {
+    console.error("getPublishedNews failed:", e);
     return [];
   }
 });
@@ -48,12 +51,25 @@ export const getPublishedNews = createServerFn({ method: "GET" }).handler(async 
 export const getPublishedCourses = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db
-      .select()
+    return await db
+      .select({
+        id: shortCourses.id,
+        slug: shortCourses.slug,
+        titleEn: shortCourses.titleEn,
+        titleBn: shortCourses.titleBn,
+        titleAr: shortCourses.titleAr,
+        subtitleEn: shortCourses.subtitleEn,
+        subtitleBn: shortCourses.subtitleBn,
+        subtitleAr: shortCourses.subtitleAr,
+        imageUrl: shortCourses.imageUrl,
+        fee: shortCourses.fee,
+        monthlyFee: shortCourses.monthlyFee,
+      })
       .from(shortCourses)
       .where(eq(shortCourses.isPublished, true))
       .orderBy(asc(shortCourses.sortOrder), asc(shortCourses.createdAt));
-  } catch {
+  } catch (e) {
+    console.error("getPublishedCourses failed:", e);
     return [];
   }
 });
@@ -69,7 +85,8 @@ export const getCourseBySlug = createServerFn({ method: "GET" })
         .where(eq(shortCourses.slug, data.slug))
         .limit(1);
       return course ?? null;
-    } catch {
+    } catch (e) {
+      console.error("getCourseBySlug failed:", e);
       return null;
     }
   });

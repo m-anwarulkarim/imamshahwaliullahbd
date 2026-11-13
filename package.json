@@ -13,7 +13,8 @@
     "deploy": "npm run build && wrangler deploy --config .output/server/wrangler.json",
     "dev:worker": "npm run build && wrangler dev --config .output/server/wrangler.json",
     "dev:remote": "npm run build && wrangler dev --remote --config .output/server/wrangler.json",
-    "seed:local": "wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/migrations/0000_short_courses_access.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/migrations/0001_add_monthly_fee_to_short_courses.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/migrations/0002_anon_read_magazine_files.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/migrations/0003_admin_workflows_order_snapshots.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/migrations/0004_admin_storage_and_course_validation.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/migrations/0005_admin_user_management.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/better-auth-schema.sql && wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/seed.sql",
+    "seed:local": "npx wrangler d1 execute imamshahwaliullahbd --local --config .output/server/wrangler.json --file=drizzle/full-schema-and-seed.sql",
+    "seed:remote": "npx wrangler d1 execute imamshahwaliullahbd --remote --file=drizzle/full-schema-and-seed.sql",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

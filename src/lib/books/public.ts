@@ -7,8 +7,9 @@ import { books, orders } from "../../../drizzle/schema/books";
 export const getFeaturedBooks = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db.select().from(books).orderBy(desc(books.createdAt)).limit(8);
-  } catch {
+    return await db.select().from(books).orderBy(desc(books.createdAt)).limit(8);
+  } catch (e) {
+    console.error("getFeaturedBooks failed:", e);
     return [];
   }
 });
@@ -16,8 +17,9 @@ export const getFeaturedBooks = createServerFn({ method: "GET" }).handler(async 
 export const getAllBooks = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db.select().from(books).orderBy(asc(books.createdAt));
-  } catch {
+    return await db.select().from(books).orderBy(asc(books.createdAt));
+  } catch (e) {
+    console.error("getAllBooks failed:", e);
     return [];
   }
 });

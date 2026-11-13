@@ -7,7 +7,7 @@ import { magazines } from "../../../drizzle/schema/content";
 export const getPublishedMagazines = createServerFn({ method: "GET" }).handler(async () => {
   try {
     const db = getDb();
-    return db
+    return await db
       .select({
         id: magazines.id,
         title: magazines.title,
@@ -20,7 +20,8 @@ export const getPublishedMagazines = createServerFn({ method: "GET" }).handler(a
       .from(magazines)
       .where(eq(magazines.isPublished, true))
       .orderBy(desc(magazines.issueMonth));
-  } catch {
+  } catch (e) {
+    console.error("getPublishedMagazines failed:", e);
     return [];
   }
 });
@@ -36,7 +37,8 @@ export const getMagazineById = createServerFn({ method: "GET" })
         .where(eq(magazines.id, data.id))
         .limit(1);
       return magazine ?? null;
-    } catch {
+    } catch (e) {
+      console.error("getMagazineById failed:", e);
       return null;
     }
   });
