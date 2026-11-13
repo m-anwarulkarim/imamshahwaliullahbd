@@ -35,5 +35,6 @@ bucket_name = "iswdri-pdfs"
 # Custom Domains — Cloudflare DNS e zone thakte hobe
 # ============================================================
 routes = [
+  { pattern = "imamshahwaliullahbd.com", custom_domain = true },
   { pattern = "test.imamshahwaliullahbd.com", custom_domain = true },
 ]
