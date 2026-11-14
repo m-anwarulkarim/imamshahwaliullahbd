@@ -27,8 +27,12 @@ export const getPublishedMagazines = createServerFn({ method: "GET" }).handler(a
 });
 
 export const getMagazineById = createServerFn({ method: "GET" })
-  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .inputValidator((data: unknown) => {
+    const res = z.object({ id: z.string() }).safeParse(data);
+    return res.success ? res.data : { id: "" };
+  })
   .handler(async ({ data }) => {
+    if (!data.id) return null;
     try {
       const db = getDb();
       const [magazine] = await db

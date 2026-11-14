@@ -25,11 +25,19 @@ export const getAllBooks = createServerFn({ method: "GET" }).handler(async () =>
 });
 
 export const getBookById = createServerFn({ method: "GET" })
-  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .inputValidator((data: unknown) => {
+    const res = z.object({ id: z.string() }).safeParse(data);
+    return res.success ? res.data : { id: "" };
+  })
   .handler(async ({ data }) => {
-    const db = getDb();
-    const [book] = await db.select().from(books).where(eq(books.id, data.id)).limit(1);
-    return book ?? null;
+    if (!data.id) return null;
+    try {
+      const db = getDb();
+      const [book] = await db.select().from(books).where(eq(books.id, data.id)).limit(1);
+      return book ?? null;
+    } catch {
+      return null;
+    }
   });
 
 const orderSchema = z.object({

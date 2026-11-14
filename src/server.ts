@@ -25,7 +25,7 @@ async function getServerEntry(): Promise<ServerEntry> {
 function handleAuthRequest(request: Request): Promise<Response> | Response {
   const d1 = getCfEnv().DB;
   if (!d1) return new Response("Database not configured", { status: 503 });
-  return createAuth(d1).handler(request);
+  return createAuth(d1, request).handler(request);
 }
 
 async function handleMediaRequest(request: Request): Promise<Response> {

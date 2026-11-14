@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getBookById } from "@/lib/books";
 import { Button } from "@/components/ui/button";
@@ -7,11 +7,14 @@ import { useLanguage } from "@/lib/i18n";
 import { seo, SITE_URL } from "@/lib/seo";
 
 export const Route = createFileRoute("/_public/publications/$bookId/")({
-  loader: ({ params, context }) =>
-    context.queryClient.ensureQueryData({
+  loader: async ({ params, context }) => {
+    const book = await context.queryClient.ensureQueryData({
       queryKey: ["book", params.bookId],
       queryFn: () => getBookById({ data: { id: params.bookId } }),
-    }),
+    });
+    if (!book) throw notFound();
+    return book;
+  },
   head: ({ loaderData, params }) => {
     const b = loaderData;
     const title = `${b?.title ?? "Book"} — ${b?.author ?? "ISWDRI"} | Imam Shah Waliullah Dehlawi Research Institute`;
